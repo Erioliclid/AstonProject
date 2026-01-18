@@ -1,5 +1,5 @@
 package org.example.commonClasses;
 
-public class CustomList {
+public class Menu {
 
 }
