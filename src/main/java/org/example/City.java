@@ -1,10 +1,13 @@
 package org.example;
 
 public class City {
-    private String name;
-    private int population;
-    private int year;
+    protected String name;
+    protected int population;
+    protected int year;
 
+    protected City() {};
+
+/*
     public City(String name, int population, int year) {
         this.name = name;
         this.population = population;
@@ -34,4 +37,7 @@ public class City {
     public void setYear(int year) {
         this.year = year;
     }
+
+ */
 }
+
