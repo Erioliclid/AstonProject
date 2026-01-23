@@ -5,7 +5,7 @@ public class City {
     protected int population;
     protected int year;
 
-    protected City() {};
+    protected City() {}
 
 /*
     public City(String name, int population, int year) {
