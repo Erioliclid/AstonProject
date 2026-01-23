@@ -1,4 +1,6 @@
-package org.example;
+package org.example.Sorting;
+
+import org.example.City;
 
 public class PopulationComparator implements ComparatorStrategy {
     @Override

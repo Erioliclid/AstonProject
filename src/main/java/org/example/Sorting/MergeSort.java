@@ -1,6 +1,7 @@
-package org.example;
+package org.example.Sorting;
 
 import java.util.ArrayList;
+import org.example.City;
 
 public class MergeSort {
     public ArrayList<City> sort(ArrayList<City> list, ComparatorStrategy comparator) {
