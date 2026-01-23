@@ -34,4 +34,13 @@ public class City {
     public void setYear(int year) {
         this.year = year;
     }
+
+    @Override
+    public String toString() {
+        return "City{" +
+                "name='" + name + '\'' +
+                ", population=" + population +
+                ", year=" + year +
+                '}';
+    }
 }
