@@ -38,9 +38,9 @@ public class CityConcept implements ICityBuilder {
     @Override
     public City getCityAfterBuild() {
         City city = new City();
-        city.name = this.name;
-        city.population = this.population;
-        city.year = this.year;
+        city.setName(name);
+        city.setPopulation(population);
+        city.setYear(year);
         return city;
     }
 }
