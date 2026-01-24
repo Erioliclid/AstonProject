@@ -43,9 +43,9 @@ public class CityDirector {
     }
 
     private static boolean validator(City city, RULE rule) {
-        return checkName(city.name, rule)
-                && checkPopulation(city.population, rule)
-                && checkYear(city.year);
+        return checkName(city.getName(), rule)
+                && checkPopulation(city.getPopulation(), rule)
+                && checkYear(city.getYear());
     }
 
     private static boolean validator(String name, int population, int year, RULE rule) {
