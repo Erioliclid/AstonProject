@@ -3,9 +3,9 @@ package org.example;
 import java.util.Objects;
 
 public class City implements Comparable<City> {
-    String name;
-    int population;
-    int year;
+    private String name;
+    private int population;
+    private int year;
 
     private volatile int hashCode;
 
