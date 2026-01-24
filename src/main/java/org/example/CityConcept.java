@@ -3,9 +3,9 @@ package org.example;
 import java.util.Objects;
 
 public class CityConcept implements ICityBuilder {
-    String name;
-    int population;
-    int year;
+    private String name;
+    private int population;
+    private int year;
 
 
     public CityConcept(String name) {
