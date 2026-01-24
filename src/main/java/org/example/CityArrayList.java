@@ -14,7 +14,6 @@ public class CityArrayList<T> {
     public CityArrayList() {
         array = new Object[INIT_CAPACITY];
         capacity = INIT_CAPACITY;
-
     }
 
     public CityArrayList(int capacity) {
@@ -77,6 +76,10 @@ public class CityArrayList<T> {
         size = 0;
     }
 
+    public boolean isEmpty(){
+        return size == 0;
+    }
+
     public int capacity() {
         return capacity;
     }
@@ -88,29 +91,44 @@ public class CityArrayList<T> {
         array[index] = element;
     }
 
-    public Object remove() {
+    public boolean remove() {
         if (size == 0) {
             throw new NoSuchElementException("The list is empty");
         }
-        Object removed = array[size - 1];
         array[size - 1] = null;
         size--;
         checkRemoveCapacity();
-        return removed;
+        return true;
     }
 
-    public Object remove(int index) {
+    public boolean remove(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
-        Object removed = array[index];
         for (int i = index; i < size - 1; i++) {
             array[i] = array[i + 1];
         }
         array[size - 1] = null;
         size--;
         checkRemoveCapacity();
-        return removed;
+        return true;
+    }
+
+    public boolean remove(String name) {
+        boolean find = false;
+        for (int i = 0; i < size; i++) {
+           City city = (City) array[i];
+           if (name.equals(city.getName())) {
+               for (int j = i; j < size - 1; j++) {
+                   array[j] = array[j + 1];
+               }
+               array[size - 1] = null;
+               size--;
+               checkRemoveCapacity();
+               find = true;
+           }
+        }
+        return find;
     }
 
     @Override

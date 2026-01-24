@@ -36,6 +36,11 @@ public class City {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        return this.name == ((City) obj).name;
+    }
+
+    @Override
     public String toString() {
         return "City{" +
                 "name='" + name + '\'' +
