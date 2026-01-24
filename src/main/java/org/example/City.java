@@ -2,7 +2,7 @@ package org.example;
 
 import java.util.Objects;
 
-public class City implements Comparable<City> {
+public class City {
     private String name;
     private int population;
     private int year;
@@ -62,11 +62,6 @@ public class City implements Comparable<City> {
             hashCode = result;
         }
         return result;
-    }
-
-    @Override
-    public int compareTo(City city) {
-        return (name == city.name) ? 0 : name.compareTo(city.name);
     }
 }
 
