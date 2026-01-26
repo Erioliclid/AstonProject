@@ -9,7 +9,7 @@ public class City {
 
     private volatile int hashCode;
 
-    protected City() {
+    City() {
     }
 
     public String getName() {
