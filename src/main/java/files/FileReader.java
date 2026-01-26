@@ -8,49 +8,34 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class FileReader {
-    private static final Pattern FORMAT_PATTERN =
-            Pattern.compile("^\\s*[^|]+\\s*\\|\\s*[^|]+\\s*\\|\\s*[^|]+\\s*$");
-
-    private static boolean isValidPath(Path path) {
-        // Если по указанному пути действительно что-то существует и это является файлом
-        // с расширением .txt вернет true, иначе false
-        if (Files.exists(path)
-                && Files.isRegularFile(path)
-                && path.getFileName().toString().toLowerCase().matches("[\\w\\-]+\\.txt$")) {
-
-            return true;
+    private static boolean isValid(Path path) throws IOException {
+        if (!FileUtils.isValidPath(path) || !FileUtils.isValidTxtExtension(path)) {
+            throw new IOException("Некорректный путь к файлу или его расширение");
         }
-        else {
-            System.out.println("Путь к файлу некорректен или файл не имеет расширения .txt!");
-            return false;
-        }
+        return true;
     }
 
-    private static boolean isValidLineFormat(String line) {
-        // Проверка строки, что она не пустая и соответствует паттерну ("Название города | население | год основания")
-        if (line == null || line.trim().isEmpty()) {
-            return false;
-        }
+    private static void processLine(String line) {}
 
-        return FORMAT_PATTERN.matcher(line).matches();
+    private static void finalMessage(LineCounter counter) {
+        System.out.println();
+        System.out.println("Чтение файла завершено!");
+        System.out.println(counter.toString());
     }
 
     public static void readFile(Path path) throws IOException {
         // Построчное чтение файла
-        if (isValidPath(path)) {
+        if (FileUtils.isValidPath(path) && FileUtils.isValidTxtExtension(path)) {
             try (Stream<String> stream = Files.lines(path)) {
-                AtomicLong lineCounter = new AtomicLong(0);
-                AtomicLong errorLineCounter = new AtomicLong(0);
+                LineCounter counter = new LineCounter();
                 stream.forEach(line -> {
-                    lineCounter.incrementAndGet();
-                    if (isValidLineFormat(line)) {
+                    counter.incrementLine();
+                    if (FileUtils.isValidLineFormat(line)) {
                         System.out.println(line);
                     }
-                    else errorLineCounter.incrementAndGet();
+                    else counter.incrementErrorLine();
                 });
-                System.out.println();
-                System.out.println("Всего строк прочитано: " + lineCounter);
-                System.out.println("Выявлено строк, не подходящих по формату: " + errorLineCounter);
+                finalMessage(counter);
             }
         }
     }
