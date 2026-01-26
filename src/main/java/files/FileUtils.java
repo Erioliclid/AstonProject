@@ -5,7 +5,10 @@ import java.nio.file.Path;
 import java.util.regex.Pattern;
 
 public final class FileUtils {
-    // Утильный класс для работы с файлами
+    /**
+     * Утилитный класс для работы с файлами
+     */
+
     private static final Pattern LINE_FORMAT_PATTERN =
             Pattern.compile("^\\s*[^|]+\\s*\\|\\s*[^|]+\\s*\\|\\s*[^|]+\\s*$");
     private static final Pattern FILENAME_PATTERN =

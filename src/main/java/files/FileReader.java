@@ -1,19 +1,28 @@
 package files;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
-public class FileReader {
-    private static boolean isValid(Path path) throws IOException {
+public final class FileReader {
+    /**
+     * Утилитный класс для чтения текстовых файлов формата "часть1 | часть2 | часть3".
+     * Пример использования:
+     * FileReader.readFile(Path.of("data.txt"));
+     */
+
+    private FileReader() {}
+
+    private static void isValid(Path path) throws IOException {
         if (!FileUtils.isValidPath(path) || !FileUtils.isValidTxtExtension(path)) {
             throw new IOException("Некорректный путь к файлу или его расширение");
         }
-        return true;
+        if (!Files.isReadable(path)) {
+            throw new IOException("Нет прав на чтение файла: " + path);
+        }
     }
-
-    private static void processLine(String line) {}
 
     private static void finalMessage(LineCounter counter) {
         System.out.println();
@@ -21,25 +30,24 @@ public class FileReader {
         System.out.println(counter.toString());
     }
 
-    public static void readFile(Path path) throws IOException {
+    private static LineCounter processLines(Stream<String> stream) {
         // Построчное чтение файла
-        if (FileUtils.isValidPath(path) && FileUtils.isValidTxtExtension(path)) {
-            try (Stream<String> stream = Files.lines(path)) {
-                LineCounter counter = new LineCounter();
-                stream.forEach(line -> {
-                    counter.incrementLine();
-                    if (FileUtils.isValidLineFormat(line)) {
-                        System.out.println(line);
-                    }
-                    else counter.incrementErrorLine();
-                });
-                finalMessage(counter);
+        LineCounter counter = new LineCounter();
+        stream.forEach(line -> {
+            counter.incrementLine();
+            if (FileUtils.isValidLineFormat(line)) {
+                System.out.println(line);
             }
-        }
+            else counter.incrementErrorLine();
+        });
+        return counter;
     }
 
-    public static void main(String[] args) throws IOException {
-        Path path = Path.of("C:\\AndroidDevelopment\\maven_repo\\com\\google\\code\\gson\\gson\\AstonProject\\src\\main\\java\\files\\testFile.txt");
-        readFile(path);
+    public static void readFile(Path path) throws IOException {
+        isValid(path);
+        try (Stream<String> stream = Files.lines(path, StandardCharsets.UTF_8)) {
+            LineCounter counter = processLines(stream);
+            finalMessage(counter);
+        }
     }
 }

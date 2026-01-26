@@ -3,7 +3,10 @@ package files;
 import java.util.concurrent.atomic.LongAdder;
 
 public final class LineCounter {
-    // Кастомный счетчик прочитанных из файла строк
+    /**
+     * Кастомный счетчик прочитанных из файла строк
+     */
+
     private final LongAdder lineCounter = new LongAdder();
     private final LongAdder errorLineCounter = new LongAdder();
 
