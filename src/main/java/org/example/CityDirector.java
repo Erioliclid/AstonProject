@@ -20,7 +20,6 @@ public class CityDirector {
         ;
     }
     public static boolean validate(City city) {
-        Objects.requireNonNull(city);
         return validate(city, RULE.RU);
     }
 
@@ -32,7 +31,6 @@ public class CityDirector {
     }
 
     public static boolean validate(String name, int population, int year) {
-        Objects.requireNonNull(name);
         return validator(name, population, year, RULE.RU);
     }
 
