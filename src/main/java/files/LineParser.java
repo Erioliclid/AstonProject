@@ -4,10 +4,22 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Objects;
 
+
+/**
+ * Утилитный класс для парсинга строк формата "часть1 | часть2 | часть3".
+ * <p>
+ * Пример использования:
+ * <pre>
+ * Map<String, String> parsed = LineParser.parseLine("Москва | 12655050 | 1147");
+ * String cityName = parsed.get(LineParser.KEY_NAME);  // "Москва"
+ * </pre>
+ *
+ * @see #parseLine(String)
+ * @see #KEY_NAME
+ * @see #KEY_POPULATION
+ * @see #KEY_YEAR
+ */
 public final class LineParser {
-    /**
-     * Класс для парсинга строки формата "Название | Население | Год" в Map.
-     */
 
     public static final String KEY_NAME = "name";
     public static final String KEY_POPULATION = "population";
@@ -16,31 +28,7 @@ public final class LineParser {
 
     private LineParser() {}
 
-    private static String separateName(String[] splitLine) {
-        return splitLine[0].trim();
-    }
-
-    private static int separatePopulation(String[] splitLine) {
-        try {
-            return Integer.parseInt(splitLine[1].trim());
-        } catch (NumberFormatException e) {
-            throw new NumberFormatException(
-                    String.format("Неверный формат населения: '%s'. Ожидается целое число.", splitLine[1].trim())
-            );
-        }
-    }
-
-    private static int separateYear(String[] splitLine) {
-        try {
-            return Integer.parseInt(splitLine[2].trim());
-        } catch (NumberFormatException e) {
-            throw new NumberFormatException(
-                    String.format("Неверный формат года основания: '%s'. Ожидается целое число.", splitLine[2].trim())
-            );
-        }
-    }
-
-    public static Map<String, Object> parseLine(String line) {
+    public static Map<String, String> parseLine(String line) {
         Objects.requireNonNull(line, "Строка не может быть null");
         String[] splitLine = line.split("\\|", -1);
 
@@ -54,10 +42,11 @@ public final class LineParser {
             );
         }
 
-        Map<String, Object> parsedLineMap = new HashMap<>();
-        parsedLineMap.put(KEY_NAME, separateName(splitLine));
-        parsedLineMap.put(KEY_POPULATION, separatePopulation(splitLine));
-        parsedLineMap.put(KEY_YEAR, separateYear(splitLine));
+        Map<String, String> parsedLineMap = new HashMap<>();
+
+        parsedLineMap.put(KEY_NAME, splitLine[0].trim());
+        parsedLineMap.put(KEY_POPULATION, splitLine[1].trim());
+        parsedLineMap.put(KEY_YEAR, splitLine[2].trim());
 
         return Map.copyOf(parsedLineMap);
     }

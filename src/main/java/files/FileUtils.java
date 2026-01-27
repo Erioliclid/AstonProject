@@ -1,5 +1,6 @@
 package files;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.regex.Pattern;
@@ -35,5 +36,14 @@ public final class FileUtils {
         }
 
         return LINE_FORMAT_PATTERN.matcher(line).matches();
+    }
+
+    public static void isValid(Path path) throws IOException {
+        if (!isValidPath(path) || !isValidTxtExtension(path)) {
+            throw new IOException("Некорректный путь к файлу или его расширение");
+        }
+        if (!Files.isReadable(path)) {
+            throw new IOException("Нет прав на чтение файла: " + path);
+        }
     }
 }
