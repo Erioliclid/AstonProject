@@ -1,9 +1,6 @@
 package files;
 
-import org.example.City;
-import org.example.CityConcept;
-import org.example.CityDirector;
-import org.example.ICityBuilder;
+import org.example.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -30,20 +27,21 @@ public final class FileReader {
         }
     }
 
-    private static void finalMessage(LineCounter counter) {
+    private static void finalMessage(LineCounter counter, int arrayLen) {
         System.out.println();
         System.out.println("Чтение файла завершено!");
         System.out.println(counter.toString());
+        System.out.println("Объектов создано: " + arrayLen);
     }
 
     private static City createCityObjFromParsedLine(Map<String, Object> parsedLine) {
-        CityConcept builder = new CityConcept();
+        ICityBuilder concept = new CityConcept();
 
         String name = (String) parsedLine.get(LineParser.KEY_NAME);
         int population = (int) parsedLine.get(LineParser.KEY_POPULATION);
         int year = (int) parsedLine.get(LineParser.KEY_YEAR);
 
-        ICityBuilder concept = builder.setName(name).setPopulation(population).setYear(year);
+        CityDirector.converter(name, population, year, concept);
 
         return CityDirector.cityDevelopment(concept);
     }
@@ -54,17 +52,16 @@ public final class FileReader {
                 " Строка: " + (line.length() > 30 ? line.substring(0, 30) + "..." : line));
     }
 
-    private static LineCounter processLines(Stream<String> stream) {
+    private static CityArrayList<City> processLines(Stream<String> stream, LineCounter counter) {
         // Построчное чтение файла, проверка валидности строк, парсинг строк
-        LineCounter counter = new LineCounter();
+        CityArrayList<City> cityList = new CityArrayList<>();
         stream.forEach(line -> {
             counter.incrementLine();
             try {
                 if (FileUtils.isValidLineFormat(line)) {
                     Map<String, Object> parsedLine = LineParser.parseLine(line);
                     City city = createCityObjFromParsedLine(parsedLine);
-                    System.out.println(line);
-                    System.out.println(parsedLine.get("name"));
+                    cityList.add(city);
                 } else counter.incrementErrorLine();
             } catch (IllegalArgumentException e) {
                 errorHandle(counter, e, line, "Ошибка парсинга: ");
@@ -72,23 +69,16 @@ public final class FileReader {
                 errorHandle(counter, e, line, "Ошибка создания объекта: ");
             }
         });
-        return counter;
+        return cityList;
     }
 
-    public static void readFile(Path path) throws IOException {
+    public static CityArrayList<City> readFile(Path path) throws IOException {
         isValid(path);
         try (Stream<String> stream = Files.lines(path, StandardCharsets.UTF_8)) {
-            LineCounter counter = processLines(stream);
-            finalMessage(counter);
-        }
-    }
-
-    public static void main(String[] args) {
-        try {
-            Path path = Path.of("C:\\AndroidDevelopment\\maven_repo\\com\\google\\code\\gson\\gson\\AstonProject\\src\\main\\java\\files\\testFile.txt");
-            readFile(path);
-        } catch (Exception e) {
-            System.out.println(e.toString());
+            LineCounter counter = new LineCounter();
+            CityArrayList<City> cityList = processLines(stream, counter);
+            finalMessage(counter, cityList.size());
+            return cityList;
         }
     }
 }
