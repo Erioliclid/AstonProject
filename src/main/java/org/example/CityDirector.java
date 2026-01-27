@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class CityDirector {
 
-    public static enum RULE {
+    public enum RULE {
         UN, // ООН
         RU, // Россия
         UA, // Украина
@@ -17,7 +17,6 @@ public class CityDirector {
         IN, // Индия
         JP, // Япония
         DEFAULT // Без указания правил страны, равносильно выбору UN
-        ;
     }
     public static boolean validate(City city) {
         return validate(city, RULE.RU);
