@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class Menu {
     private Scanner scanner;
-    private boolean returnToMain = false;
 
     public Menu() {
         this.scanner = new Scanner(System.in);
