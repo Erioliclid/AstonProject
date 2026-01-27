@@ -110,7 +110,7 @@ public class CityDirector {
     public static City cityDevelopment(ICityBuilder concept) {
         City newCity = concept.getCityAfterBuild();
         if (!validate(newCity))
-            throw new RuntimeException("CityConcept: Invalid input data for building a class City");
+            throw new RuntimeException("CityDevelopment: Invalid input data for building a class City");
         return newCity;
     }
 }
