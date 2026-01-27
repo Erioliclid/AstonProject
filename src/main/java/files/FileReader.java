@@ -2,6 +2,8 @@ package files;
 
 import org.example.City;
 import org.example.CityConcept;
+import org.example.CityDirector;
+import org.example.ICityBuilder;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -41,7 +43,15 @@ public final class FileReader {
         int population = (int) parsedLine.get(LineParser.KEY_POPULATION);
         int year = (int) parsedLine.get(LineParser.KEY_YEAR);
 
-        return builder.setName(name).setPopulation(population).setYear(year).getCityAfterBuild();
+        ICityBuilder concept = builder.setName(name).setPopulation(population).setYear(year);
+
+        return CityDirector.cityDevelopment(concept);
+    }
+
+    private static void errorHandle(LineCounter counter, Exception e, String line, String errorType) {
+        counter.incrementErrorLine();
+        System.err.println(errorType + e.getMessage() +
+                " Строка: " + (line.length() > 30 ? line.substring(0, 30) + "..." : line));
     }
 
     private static LineCounter processLines(Stream<String> stream) {
@@ -57,10 +67,9 @@ public final class FileReader {
                     System.out.println(parsedLine.get("name"));
                 } else counter.incrementErrorLine();
             } catch (IllegalArgumentException e) {
-                counter.incrementErrorLine(); //можно вынести в отдельный метод
-                System.err.println("Ошибка парсинга: " + e.getMessage() +
-                        " Строка: " + (line.length() > 30 ? line.substring(0, 30) + "..." : line));
-
+                errorHandle(counter, e, line, "Ошибка парсинга: ");
+            } catch (RuntimeException e) {
+                errorHandle(counter, e, line, "Ошибка создания объекта: ");
             }
         });
         return counter;
