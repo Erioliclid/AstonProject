@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.stream.Stream;
 
 public final class FileReader {
@@ -31,14 +32,23 @@ public final class FileReader {
     }
 
     private static LineCounter processLines(Stream<String> stream) {
-        // Построчное чтение файла
+        // Построчное чтение файла, проверка валидности строк, парсинг строк
         LineCounter counter = new LineCounter();
         stream.forEach(line -> {
             counter.incrementLine();
-            if (FileUtils.isValidLineFormat(line)) {
-                System.out.println(line);
+            try {
+                if (FileUtils.isValidLineFormat(line)) {
+                    Map<String, Object> parsedLine = LineParser.parseLine(line);
+                    // тут должен создаваться объект City
+                    System.out.println(line);
+                    System.out.println(parsedLine.get("name"));
+                } else counter.incrementErrorLine();
+            } catch (IllegalArgumentException e) {
+                counter.incrementErrorLine(); //можно вынести в отдельный метод
+                System.err.println("Ошибка парсинга: " + e.getMessage() +
+                        " Строка: " + (line.length() > 30 ? line.substring(0, 30) + "..." : line));
+
             }
-            else counter.incrementErrorLine();
         });
         return counter;
     }
@@ -48,6 +58,15 @@ public final class FileReader {
         try (Stream<String> stream = Files.lines(path, StandardCharsets.UTF_8)) {
             LineCounter counter = processLines(stream);
             finalMessage(counter);
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            Path path = Path.of("C:\\AndroidDevelopment\\maven_repo\\com\\google\\code\\gson\\gson\\AstonProject\\src\\main\\java\\files\\testFile.txt");
+            readFile(path);
+        } catch (Exception e) {
+            System.out.println(e.toString());
         }
     }
 }

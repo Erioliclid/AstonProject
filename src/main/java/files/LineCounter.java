@@ -31,7 +31,7 @@ public final class LineCounter {
     }
 
     public String toString() {
-        return String.format("Всего строк: %d\nВалидный строк: %d\nОшибок формата: %d",
+        return String.format("Всего строк: %d\nВалидных строк: %d\nОшибок формата: %d",
                 getTotalLines(),
                 getValidLines(),
                 getErrorLines());
