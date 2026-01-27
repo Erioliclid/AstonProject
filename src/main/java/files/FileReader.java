@@ -1,5 +1,8 @@
 package files;
 
+import org.example.City;
+import org.example.CityConcept;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -31,6 +34,16 @@ public final class FileReader {
         System.out.println(counter.toString());
     }
 
+    private static City createCityObjFromParsedLine(Map<String, Object> parsedLine) {
+        CityConcept builder = new CityConcept();
+
+        String name = (String) parsedLine.get(LineParser.KEY_NAME);
+        int population = (int) parsedLine.get(LineParser.KEY_POPULATION);
+        int year = (int) parsedLine.get(LineParser.KEY_YEAR);
+
+        return builder.setName(name).setPopulation(population).setYear(year).getCityAfterBuild();
+    }
+
     private static LineCounter processLines(Stream<String> stream) {
         // Построчное чтение файла, проверка валидности строк, парсинг строк
         LineCounter counter = new LineCounter();
@@ -39,7 +52,7 @@ public final class FileReader {
             try {
                 if (FileUtils.isValidLineFormat(line)) {
                     Map<String, Object> parsedLine = LineParser.parseLine(line);
-                    // тут должен создаваться объект City
+                    City city = createCityObjFromParsedLine(parsedLine);
                     System.out.println(line);
                     System.out.println(parsedLine.get("name"));
                 } else counter.incrementErrorLine();

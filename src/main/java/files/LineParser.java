@@ -9,9 +9,9 @@ public final class LineParser {
      * Класс для парсинга строки формата "Название | Население | Год" в Map.
      */
 
-    private static final String KEY_NAME = "name";
-    private static final String KEY_POPULATION = "population";
-    private static final String KEY_YEAR = "year";
+    public static final String KEY_NAME = "name";
+    public static final String KEY_POPULATION = "population";
+    public static final String KEY_YEAR = "year";
     private static final int EXPECTED_PARTS_COUNT = 3;
 
     private LineParser() {}
