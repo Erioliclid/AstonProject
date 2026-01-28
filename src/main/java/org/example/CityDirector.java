@@ -1,5 +1,6 @@
 package org.example;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -106,10 +107,14 @@ public class CityDirector {
         return converter(name, population, year, concept);
     }
 
-    public static City cityDevelopment(ICityBuilder concept) {
+    public static City cityDevelopment(ICityBuilder concept) throws NotValidCityDataException {
+        return cityDevelopment(concept, RULE.RU);
+    }
+
+    public static City cityDevelopment(ICityBuilder concept, RULE country) throws NotValidCityDataException {
         City newCity = concept.getCityAfterBuild();
-        if (!validate(newCity))
-            throw new RuntimeException("CityDevelopment: Invalid input data for building a class City");
+        if (!validate(newCity, country))
+            throw new NotValidCityDataException("cityDevelopment: input data for create object type City not valid");
         return newCity;
     }
 }
