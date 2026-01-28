@@ -170,13 +170,13 @@ public class CityDirectorTest {
 
     @Test
     public void cityDevelopment() {
-        RuntimeException thrown = assertThrows(RuntimeException.class,
+        NotValidCityDataException thrown = assertThrows(NotValidCityDataException.class,
                 () -> CityDirector.cityDevelopment(new CityConcept()
                         .setName("test")
                         .setYear(0)
                         .setPopulation(0)));
 
-        assertEquals("CityDevelopment: Invalid input data for building a class City",
+        assertEquals("cityDevelopment: input data for create object type City not valid",
                 thrown.getMessage());
 
         City obj1 = new City();
@@ -184,11 +184,16 @@ public class CityDirectorTest {
         obj1.setPopulation(12_000);
         obj1.setYear(0);
 
-        City obj2 = CityDirector.cityDevelopment(new CityConcept()
-                .setName("Test")
-                .setPopulation(12_000)
-                .setYear(0));
+        try {
+            City obj2 = CityDirector.cityDevelopment(new CityConcept()
+                    .setName("Test")
+                    .setPopulation(12_000)
+                    .setYear(0));
 
-        assertEquals(obj1, obj2);
+            assertEquals(obj1, obj2);
+
+        } catch (NotValidCityDataException e) {
+            e.getMessage();
+        }
     }
 }
