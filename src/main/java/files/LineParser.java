@@ -38,6 +38,11 @@ public class LineParser {
             );
         }
 
+        String name = splitLine[0].trim();
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException("Название города не может быть пустым. Строка: '" + line + "'");
+        }
+
         Map<String, String> parsedLineMap = new HashMap<>();
 
         parsedLineMap.put(KEY_NAME, splitLine[0].trim());
