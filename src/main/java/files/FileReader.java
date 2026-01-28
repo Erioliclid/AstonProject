@@ -1,6 +1,10 @@
 package files;
 
-import org.example.*;
+import org.example.City;
+import org.example.CityArrayList;
+import org.example.ICityBuilder;
+import org.example.CityConcept;
+import org.example.CityDirector;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -95,7 +99,7 @@ public class FileReader {
      */
     public CityArrayList<City> readFile(Path filePath, boolean printResults) throws IOException {
         if (!FileUtils.isValidPath(filePath)) {
-            throw new IOException("Некорректный путь к файлу или файл недоступен для чтения: " + filePath);
+            throw new IOException("Некорректный путь к файлу: " + filePath);
         }
         try (Stream<String> stream = Files.lines(filePath, StandardCharsets.UTF_8)) {
             processLines(stream, this.counter);

@@ -52,6 +52,14 @@ public class LineParser {
         return Map.copyOf(parsedLineMap);
     }
 
+    public String parseHashMap(HashMap<String, String> map) {
+        String formatedLine = "%s | %s | %s";
+        return String.format(formatedLine,
+                map.get(LineParser.KEY_NAME),
+                map.get(LineParser.KEY_POPULATION),
+                map.get(LineParser.KEY_YEAR));
+    }
+
     @Override
     public boolean equals(Object o) {
         return this == o || (o != null && getClass() == o.getClass());

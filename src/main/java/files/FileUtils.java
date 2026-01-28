@@ -26,7 +26,7 @@ public final class FileUtils {
      *         имеет расширение .txt и доступен для чтения
      */
     public static boolean isValidPath(Path path) {
-        return path != null && Files.exists(path) && Files.isRegularFile(path) && isValidTxtExtension(path) && Files.isReadable(path);
+        return path != null && Files.exists(path) && Files.isRegularFile(path) && isValidTxtExtension(path);
     }
 
     /**
