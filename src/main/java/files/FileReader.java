@@ -7,27 +7,37 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
 
-public final class FileReader {
-    /**
-     * Утилитный класс для чтения текстовых файлов формата "часть1 | часть2 | часть3".
-     * Пример использования:
-     * FileReader.readFile(Path.of("data.txt"));
-     */
+/**
+ * Читает файлы с данными о городах в формате "Название | Население | Год".
+ * Пример файла:
+ * Москва | 12655050 | 1147
+ * Санкт-Петербург | 5384342 | 1703
+ */
+public class FileReader {
+    private final LineParser parser;
+    private final LineCounter counter;
+    private final CityArrayList<City> list;
 
-    private FileReader() {}
-
-    private static void finalMessage(LineCounter counter, int arrayLen) {
-        System.out.println();
-        System.out.println("Чтение файла завершено!");
-        System.out.println(counter.toString());
-        System.out.println("Объектов создано: " + arrayLen);
+    public FileReader() {
+        this.parser = new LineParser();
+        this.counter = new LineCounter();
+        this.list = new CityArrayList<>();
     }
 
-    private static City createCityObjFromParsedLine(Map<String, String> parsedLine) {
-        ICityBuilder concept = new CityConcept();
+    /** Выводит статистику обработки в консоль */
+    private void printResultMessage() {
+        System.out.println();
+        System.out.println("Чтение файла завершено!");
+        System.out.println(this.counter);
+        System.out.println("Объектов создано: " + this.list.size());
+    }
 
+    /** Создает объект класса City из распарсенных данных */
+    private City createCityObjFromParsedLine(Map<String, String> parsedLine) {
+        ICityBuilder concept = new CityConcept();
         CityDirector.converter(parsedLine.get(LineParser.KEY_NAME),
                 parsedLine.get(LineParser.KEY_POPULATION),
                 parsedLine.get(LineParser.KEY_YEAR),
@@ -36,45 +46,88 @@ public final class FileReader {
         return CityDirector.cityDevelopment(concept);
     }
 
-    private static void errorHandle(Exception e, String line, String errorType) {
-        System.err.println(errorType + e.getMessage() +
-                " Строка: " + (line.length() > 30 ? line.substring(0, 30) + "..." : line));
+    /** Логирует ошибку */
+    private void logError(Exception e, String errorType, String line) {
+        String message = errorType + e.getMessage();
+        if (line != null) {
+            String truncated = line.length() > 30 ? line.substring(0, 30) + "..." : line;
+            message += " Строка: " + truncated;
+        }
+        System.err.println(message);
     }
 
-    private static CityArrayList<City> processLines(Stream<String> stream, LineCounter counter) {
-        // Построчное чтение файла, проверка валидности строк, парсинг строк
-        CityArrayList<City> cityList = new CityArrayList<>();
+    /** Обрабатывает поток строк, заполняя this.list */
+    private void processLines(Stream<String> stream, LineCounter counter) {
         stream.forEach(line -> {
             counter.incrementLine();
             try {
                 if (FileUtils.isValidLineFormat(line)) {
-                    Map<String, String> parsedLine = LineParser.parseLine(line);
+                    Map<String, String> parsedLine = this.parser.parseLine(line);
                     City city = createCityObjFromParsedLine(parsedLine);
-                    cityList.add(city);
+                    this.list.add(city);
                 } else counter.incrementErrorLine();
             } catch (IllegalArgumentException e) {
                 counter.incrementErrorLine();
-                errorHandle(e, line, "Ошибка парсинга: ");
+                logError(e, "Ошибка парсинга: ", line);
             } catch (RuntimeException e) {
                 counter.incrementErrorLine();
-                errorHandle(e, line, "Ошибка создания объекта: ");
+                logError(e, "Ошибка создания объекта: ", line);
             }
         });
-        return cityList;
     }
 
-    public static CityArrayList<City> readFile(Path path) throws IOException {
-        FileUtils.isValid(path);
-        try (Stream<String> stream = Files.lines(path, StandardCharsets.UTF_8)) {
-            LineCounter counter = new LineCounter();
-            CityArrayList<City> cityList = processLines(stream, counter);
-            finalMessage(counter, cityList.size());
-            return cityList;
+    /** Копирует список (поверхностное копирование) */
+    private CityArrayList<City> copyList(CityArrayList<City> source) {
+        CityArrayList<City> copy = new CityArrayList<>();
+        for (int i = 0; i < source.size(); i++) {
+            copy.add(source.get(i));
+        }
+        return copy;
+    }
+
+    /**
+     * Читает файл и возвращает список городов.
+     *
+     * @param filePath путь к файлу .txt
+     * @param printResults выводить ли статистику в консоль
+     * @return список объектов City
+     * @throws IOException если файл не найден, недоступен или имеет неверный формат
+     */
+    public CityArrayList<City> readFile(Path filePath, boolean printResults) throws IOException {
+        if (!FileUtils.isValidPath(filePath)) {
+            throw new IOException("Некорректный путь к файлу или файл недоступен для чтения: " + filePath);
+        }
+        try (Stream<String> stream = Files.lines(filePath, StandardCharsets.UTF_8)) {
+            processLines(stream, this.counter);
+            if (printResults) {
+                printResultMessage();
+            }
+
+            // Копируем результат и очищаем this.list и this.counter
+            CityArrayList<City> resultList = copyList(this.list);
+            this.list.clear(); // возможна утечка памяти
+            this.counter.reset();
+            return resultList;
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        Path path = Path.of("C:\\AndroidDevelopment\\maven_repo\\com\\google\\code\\gson\\gson\\AstonProject\\src\\main\\java\\files\\testFile.txt");
-        readFile(path);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FileReader that = (FileReader) o;
+        return Objects.equals(parser, that.parser);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(parser);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("FileReader{parser=%s, currentState=%s}",
+                parser.getClass().getSimpleName(),
+                counter);
     }
 }
