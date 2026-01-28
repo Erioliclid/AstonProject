@@ -4,7 +4,6 @@ import org.example.menu.Menu;
 
 public class AppManager {
     public void run() {
-
         Menu menu = new Menu();
         boolean running = true;
 
@@ -14,4 +13,3 @@ public class AppManager {
         }
     }
 }
-

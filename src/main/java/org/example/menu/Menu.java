@@ -1,29 +1,30 @@
 package org.example.menu;
 
+import org.example.City;
+import org.example.appConfig.AppState;
+
+
 import java.util.Scanner;
 
+import static org.example.menu.MenuPrint.*;
+
 public class Menu {
-    private Scanner scanner;
+    private final Scanner scanner;
+    private final AppState appState;
 
     public Menu() {
         this.scanner = new Scanner(System.in);
+        this.appState = new AppState();
     }
 
     public void mainMenu() {
         clear();
-        System.out.println("""
-                ==============================
-                Приложение *Сортировка городов*
-                ==============================
-                1. Ввод данных
-                2. Сортировка данных
-                3. Сохранение в файл
-                4. Многопоточный подсчет
-                0. Выход
-                ------------------------------
-                Выберите нужный пункт..:                
-                """);
-
+        System.out.println(MAIN_MENU_PRINT);
+        if (appState.isCityLoaded()) {
+            City[] cities = appState.getCurrentCities();
+            System.out.println("Загружено городов: " + cities.length);
+        }
+        System.out.println("Выберите нужный пункт: ");
     }
 
     public boolean mainMenuChoice() {
@@ -33,38 +34,42 @@ public class Menu {
                 dataInputMenu();
                 break;
             case "2":
-                sortingMenu();
+                if (!appState.isCityLoaded()) {
+                    System.out.println("Для использования загрузите данные");
+                    waitingForEnter();
+                } else {
+                    sortingMenu();
+                }
                 break;
             case "3":
-                saveMenu();
+                if (!appState.isCityLoaded()) {
+                    System.out.println("Для использования загрузите данные");
+                    waitingForEnter();
+                } else {
+                    saveMenu();
+                }
                 break;
             case "4":
-                threadCounting();
-                //многопоточка
+                if (!appState.isCityLoaded()) {
+                    System.out.println("Для использования загрузите данные");
+                    waitingForEnter();
+                } else {
+                    threadCounting();
+                }
                 break;
             case "0":
                 System.out.println("Выход из приложения");
                 return false;
             default:
-                System.out.println("Такого значения нет. Нажмите Enter и повторите попытку");
-                scanner.nextLine();
+                System.out.println("Такого значения нет");
+                waitingForEnter();
         }
         return true;
     }
 
     private void dataInputMenu() {
         clear();
-        System.out.println("""
-                ==============================
-                          Ввод данных
-                ==============================
-                1. Ввод вручную
-                2. Случайная генерация
-                3. Загрузить из файла
-                0. Назад
-                ------------------------------
-                Выберите нужный пункт..:                
-                """);
+        System.out.println(DATA_INPUT_PRINT);
 
         String choice = scanner.nextLine().trim();
         switch (choice) {
@@ -83,25 +88,19 @@ public class Menu {
             case "0":
                 return;
             default:
-                System.out.println("Такого значения нет. Нажмите Enter и повторите попытку");
-                scanner.nextLine();
+                System.out.println("Такого значения нет");
         }
+        waitingForEnter();
     }
 
     private void sortingMenu() {
         clear();
-        System.out.println("""
-                ==============================
-                          Сортировка
-                ==============================
-                1. По названию
-                2. По году основания
-                3. По населению
-                4. По чет/нечет
-                0. Назад
-                ------------------------------
-                Выберите нужный пункт..:                
-                """);
+        System.out.println(SORT_MENU_PRINT);
+        if (appState.isCityLoaded()) {
+            City[] cities = appState.getCurrentCities();
+            System.out.println("Количество городов: " + cities.length + " дя сортировки");
+        }
+        System.out.println("Выберите нужный пункт: ");
         String choice = scanner.nextLine().trim();
         switch (choice) {
             case "1":
@@ -122,24 +121,15 @@ public class Menu {
             case "0":
                 return;
             default:
-                System.out.println("Такого значения нет. Нажмите Enter и повторите попытку");
-                scanner.nextLine();
-
+                System.out.println("Такого значения нет");
         }
+        System.out.println("\nСортировка завершена");
+        waitingForEnter();
     }
 
     private void saveMenu() {
         clear();
-        System.out.println("""
-                ==============================
-                       Сохранение в файл
-                ==============================
-                1. Сохранить файл
-                2. Добавить в существующий файл
-                0. Назад
-                ------------------------------
-                Выберите нужный пункт..:                
-                """);
+        System.out.println(SAVE_MENU_PRINT);
         String choice = scanner.nextLine().trim();
         switch (choice) {
             case "1":
@@ -153,24 +143,28 @@ public class Menu {
             case "0":
                 return;
             default:
-                System.out.println("Такого значения нет. Нажмите Enter и повторите попытку");
-                scanner.nextLine();
+                System.out.println("Такого значения нет");
         }
+        waitingForEnter();
     }
 
-    private void threadCounting(){
+    private void threadCounting() {
         System.out.println("Многопоточный подсчет");
         // ??
     }
-    private void clear(){
+
+    private void waitingForEnter() {
+        System.out.println("Нажмите Enter для продолжения");
+        scanner.nextLine();
+    }
+
+    private void clear() {
         for (int i = 0; i < 30; i++) {
             System.out.println();
-            }
+        }
     }
 
 
 }
-// все менюшки скинуть в один класс и использовать их реализацию?
 // вывод для многопоточки?
-// консольный вызов?
-// добавить состояния в апстейт для корректной работы приложения
+// слияние и добавление методов
