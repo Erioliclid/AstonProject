@@ -26,12 +26,6 @@ ErrorLogger logger - логирует ошибки
 5. printResultMessage() если printResults=true
 6. counter.reset()
 
-Особенности
-Try-with-resources гарантирует закрытие Stream
-Peek для подсчета валидных строк без нарушения потока
-Null-safety через Objects.requireNonNull и filter(Objects::nonNull)
-Equals/hashCode только по parser (ключевой компонент)
-
 FileWriter - Запись данных
 Добавляет данные городов в конец существующего файла или создает новый.
 
@@ -50,12 +44,6 @@ ErrorLogger logger - логирует ошибки записи
    • writer.write(line)
    • count.increment() или logger.logError()
 5. printResultMessage() показывает статистику
-
-Особенности
-APPEND mode сохраняет старые данные
-LongAdder для thread-safe подсчета
-CREATE|APPEND|WRITE опции для надежности
-Автоматическое создание директорий
 
 Пример использования:
 LineParser parser = new LineParser();
