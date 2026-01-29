@@ -1,5 +1,8 @@
 package org.example;
 
+import org.example.exception.NotValidCityDataException;
+import org.example.country.Rule;
+
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,28 +37,28 @@ public class CityDirectorTest {
                 .setPopulation(250)
                 .getCityAfterBuild();
 
-        assertTrue(CityDirector.validate(testObj1, CityDirector.RULE.AU));
+        assertTrue(CityDirector.validate(testObj1, Rule.AU));
 
         testObj1 = new CityConcept()
                 .setName("Bad")
                 .setPopulation(199)
                 .getCityAfterBuild();
 
-        assertFalse(CityDirector.validate(testObj1, CityDirector.RULE.AU));
+        assertFalse(CityDirector.validate(testObj1, Rule.AU));
 
         testObj1 = new CityConcept()
                 .setName("Good")
                 .setPopulation(12_000)
                 .getCityAfterBuild();
 
-        assertTrue(CityDirector.validate(testObj1, CityDirector.RULE.RU));
+        assertTrue(CityDirector.validate(testObj1, Rule.RU));
 
         testObj1 = new CityConcept()
                 .setName("Bad")
                 .setPopulation(11_999)
                 .getCityAfterBuild();
 
-        assertFalse(CityDirector.validate(testObj1, CityDirector.RULE.RU));
+        assertFalse(CityDirector.validate(testObj1, Rule.RU));
     }
 
     @Test
@@ -71,9 +74,9 @@ public class CityDirectorTest {
         obj.setPopulation(50_000);
         obj.setYear(0);
 
-        assertTrue(CityDirector.validate(obj, CityDirector.RULE.DEFAULT));
-        assertTrue(CityDirector.validate(obj, CityDirector.RULE.UN));
-        assertTrue(CityDirector.validate(obj, CityDirector.RULE.RU));
+        assertTrue(CityDirector.validate(obj, Rule.DEFAULT));
+        assertTrue(CityDirector.validate(obj, Rule.UN));
+        assertTrue(CityDirector.validate(obj, Rule.RU));
     }
 
     @Test
@@ -83,32 +86,32 @@ public class CityDirectorTest {
         obj.setPopulation(50_000);
         obj.setYear(0);
 
-        assertTrue(CityDirector.validate(obj, CityDirector.RULE.RU));
+        assertTrue(CityDirector.validate(obj, Rule.RU));
 
         obj.setName(" Test ");
-        assertFalse(CityDirector.validate(obj, CityDirector.RULE.RU));
+        assertFalse(CityDirector.validate(obj, Rule.RU));
     }
 
     @Test
     public void testValidateEnum() {
-        assertFalse(CityDirector.validate("Bad", 19_999, 0, CityDirector.RULE.DEFAULT));
-        assertFalse(CityDirector.validate("Bad", 19_999, 0, CityDirector.RULE.UN));
-        assertFalse(CityDirector.validate("Bad", 6_999, 0, CityDirector.RULE.UZ));
-        assertFalse(CityDirector.validate("Bad", 9_999, 0, CityDirector.RULE.UA));
-        assertFalse(CityDirector.validate("Bad", 9_999, 0, CityDirector.RULE.MD));
-        assertFalse(CityDirector.validate("Bad", 9_999, 0, CityDirector.RULE.KG));
-        assertFalse(CityDirector.validate("Bad", 9_999, 0, CityDirector.RULE.TJ));
-        assertFalse(CityDirector.validate("Bad", 11_999, 0, CityDirector.RULE.RU));
-        assertFalse(CityDirector.validate("Bad", 29_999, 0, CityDirector.RULE.JP));
-        assertTrue(CityDirector.validate("Good", 20_000, 0, CityDirector.RULE.DEFAULT));
-        assertTrue(CityDirector.validate("Good", 20_000, 0, CityDirector.RULE.UN));
-        assertTrue(CityDirector.validate("Good", 7_000, 0, CityDirector.RULE.UZ));
-        assertTrue(CityDirector.validate("Good", 10_000, 0, CityDirector.RULE.UA));
-        assertTrue(CityDirector.validate("Good", 10_000, 0, CityDirector.RULE.MD));
-        assertTrue(CityDirector.validate("Good", 10_000, 0, CityDirector.RULE.KG));
-        assertTrue(CityDirector.validate("Good", 10_000, 0, CityDirector.RULE.TJ));
-        assertTrue(CityDirector.validate("Good", 12_000, 0, CityDirector.RULE.RU));
-        assertTrue(CityDirector.validate("Good", 30_000, 0, CityDirector.RULE.JP));
+        assertFalse(CityDirector.validate("Bad", 19_999, 0, Rule.DEFAULT));
+        assertFalse(CityDirector.validate("Bad", 19_999, 0, Rule.UN));
+        assertFalse(CityDirector.validate("Bad", 6_999, 0, Rule.UZ));
+        assertFalse(CityDirector.validate("Bad", 9_999, 0, Rule.UA));
+        assertFalse(CityDirector.validate("Bad", 9_999, 0, Rule.MD));
+        assertFalse(CityDirector.validate("Bad", 9_999, 0, Rule.KG));
+        assertFalse(CityDirector.validate("Bad", 9_999, 0, Rule.TJ));
+        assertFalse(CityDirector.validate("Bad", 11_999, 0, Rule.RU));
+        assertFalse(CityDirector.validate("Bad", 29_999, 0, Rule.JP));
+        assertTrue(CityDirector.validate("Good", 20_000, 0, Rule.DEFAULT));
+        assertTrue(CityDirector.validate("Good", 20_000, 0, Rule.UN));
+        assertTrue(CityDirector.validate("Good", 7_000, 0, Rule.UZ));
+        assertTrue(CityDirector.validate("Good", 10_000, 0, Rule.UA));
+        assertTrue(CityDirector.validate("Good", 10_000, 0, Rule.MD));
+        assertTrue(CityDirector.validate("Good", 10_000, 0, Rule.KG));
+        assertTrue(CityDirector.validate("Good", 10_000, 0, Rule.TJ));
+        assertTrue(CityDirector.validate("Good", 12_000, 0, Rule.RU));
+        assertTrue(CityDirector.validate("Good", 30_000, 0, Rule.JP));
     }
 
     @Test
