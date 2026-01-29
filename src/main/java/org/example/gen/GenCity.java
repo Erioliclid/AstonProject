@@ -2,31 +2,26 @@ package org.example.gen;
 
 import org.example.*;
 import org.example.country.Alphabet;
+import org.example.country.Rule;
+import org.example.exception.NotValidCityDataException;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Random;
 
 public class GenCity {
     private static final Random rnd;
-    private static final HashMap<Integer, Alphabet> alphabetHashMap;
     private static final ICityBuilder defaultConcept;
 
     static {
         rnd = new Random();
         defaultConcept = new CityConcept();
-        alphabetHashMap = new HashMap<>();
-
-        for (Alphabet a: Alphabet.values()) {
-            alphabetHashMap.put(a.getId(), a);
-        }
     }
 
     public static String name() {
         final int maxLength = 20;
         final int minLength = 4;
-        Integer choiceAlphabet = rnd.nextInt(Alphabet.getQuantity());
-        Alphabet alphabet = alphabetHashMap.get(choiceAlphabet);
+        int choiceAlphabet = rnd.nextInt(Rule.getQuantity());
+        Alphabet alphabet = Rule.values()[choiceAlphabet].getAlphabet();
         int letterQuantity = rnd.nextInt(maxLength - minLength) + minLength;
         int minCodeLetter = alphabet.firstLowercase();
         int alphabetSize = alphabet.lastLowercase() - alphabet.firstLowercase();
