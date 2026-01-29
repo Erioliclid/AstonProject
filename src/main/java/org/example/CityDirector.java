@@ -1,73 +1,56 @@
 package org.example;
 
+import org.example.exception.NotValidCityDataException;
+import org.example.country.Rule;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class CityDirector {
 
-    public enum RULE {
-        UN, // ООН
-        RU, // Россия
-        UA, // Украина
-        UZ, // Узбекистан
-        MD, // Республика Молдова
-        KG, // Киргизия
-        TJ, // Таджикистан
-        AU, // Австралия
-        IN, // Индия
-        JP, // Япония
-        DEFAULT // Без указания правил страны, равносильно выбору UN
-    }
-    public static boolean validate(City city) {
-        return validate(city, RULE.RU);
+     public static boolean validate(City city) {
+        return validate(city, Rule.RU);
     }
 
-    public static boolean validate(City city, RULE rule) {
+    public static boolean validate(City city, Rule rule) {
         Objects.requireNonNull(city);
-        RULE ruleCurrent = (rule == RULE.DEFAULT) ? RULE.UN : rule;
+        Rule ruleCurrent = (rule == Rule.DEFAULT) ? Rule.UN : rule;
 
         return validator(city, ruleCurrent);
     }
 
     public static boolean validate(String name, int population, int year) {
-        return validator(name, population, year, RULE.RU);
+        return validator(name, population, year, Rule.RU);
     }
 
-    public static boolean validate(String name, int population, int year, RULE rule) {
+    public static boolean validate(String name, int population, int year, Rule rule) {
         Objects.requireNonNull(name);
-        RULE ruleCurrent = (rule == RULE.DEFAULT) ? RULE.UN : rule;
+        Rule ruleCurrent = (rule == Rule.DEFAULT) ? Rule.UN : rule;
         return validator(name, population, year, ruleCurrent);
     }
 
-    private static boolean validator(City city, RULE rule) {
+    private static boolean validator(City city, Rule rule) {
         return checkName(city.getName(), rule)
                 && checkPopulation(city.getPopulation(), rule)
                 && checkYear(city.getYear());
     }
 
-    private static boolean validator(String name, int population, int year, RULE rule) {
+    private static boolean validator(String name, int population, int year, Rule rule) {
         return checkName(name, rule)
                 && checkPopulation(population, rule)
                 && checkYear(year);
     }
 
-    private static boolean checkName(String name, RULE rule) {
+    private static boolean checkName(String name, Rule rule) {
         final String nameRegExp =
                 "^[a-zA-Zа-яА-Я]+($|(\\s\\-\\s|\\-)[a-zA-Zа-яА-Я]+)*($|(\\s\\-\\s|\\-)\\d+$)";
 
         return !name.isEmpty() && name.matches(nameRegExp);
     }
 
-    private static boolean checkPopulation(int population, RULE rule) {
+    private static boolean checkPopulation(int population, Rule rule) {
         final int highLimit = 100_000_000;
-        int lowLimit = switch (rule) {
-            case AU -> 250;
-            case UZ -> 7_000;
-            case UA, MD, KG, TJ -> 10_000;
-            case RU -> 12_000;
-            case JP -> 30_000;
-            default -> 20_000;
-        };
+        int lowLimit = rule.getMinPopulationForCityStatus();
 
         return population >= lowLimit && population < highLimit;
     }
@@ -107,10 +90,10 @@ public class CityDirector {
     }
 
     public static City cityDevelopment(ICityBuilder concept) throws NotValidCityDataException {
-        return cityDevelopment(concept, RULE.RU);
+        return cityDevelopment(concept, Rule.RU);
     }
 
-    public static City cityDevelopment(ICityBuilder concept, RULE country) throws NotValidCityDataException {
+    public static City cityDevelopment(ICityBuilder concept, Rule country) throws NotValidCityDataException {
         City newCity = concept.getCityAfterBuild();
         if (!validate(newCity, country))
             throw new NotValidCityDataException("cityDevelopment: input data for create object type City not valid");
