@@ -15,7 +15,7 @@ public class GenCity {
     static {
         rnd = new Random();
         defaultConcept = new CityConcept();
-        alphabetHashMap = new HashMap<Integer, Alphabet>();
+        alphabetHashMap = new HashMap<>();
 
         for (Alphabet a: Alphabet.values()) {
             alphabetHashMap.put(a.getId(), a);
