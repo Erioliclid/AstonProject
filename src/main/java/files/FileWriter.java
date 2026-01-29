@@ -11,15 +11,25 @@ import java.nio.file.StandardOpenOption;
 import java.util.Objects;
 import java.util.concurrent.atomic.LongAdder;
 
+/**
+ * Записывает данные о городах в текстовые файлы.
+ * Добавляет новые данные в конец файла, сохраняя старые.
+ */
 public class FileWriter {
     private static final String DELIMITER = "\n------Добавление данных-------\n\n";
 
     private final ErrorLogger logger;
 
+    /**
+     * Создает FileWriter с указанным логгером ошибок.
+     *
+     * @param logger логгер для записи ошибок (не может быть null)
+     */
     public FileWriter(ErrorLogger logger) {
         this.logger = Objects.requireNonNull(logger);
     }
 
+    /** Проверяет расширение .txt и создает файл если его нет */
     private void checkAndCreateFile(Path filePath) throws IOException {
         if (!FileUtils.isValidTxtExtension(filePath)) {
             throw new IOException("Файл должен иметь расширение .txt: " + filePath);
@@ -32,6 +42,7 @@ public class FileWriter {
         }
     }
 
+    /** Выводит статистику записи данных */
     private void printResultMessage(LongAdder count, long listSize) {
         System.out.println("Всего строк записано: " + count);
         long errorCount = listSize - count.sum();
@@ -40,6 +51,16 @@ public class FileWriter {
         }
     }
 
+    /**
+     * Записывает список городов в файл.
+     * Если файла нет - создает его.
+     * Если файл есть - добавляет данные в конец.
+     *
+     * @param filePath путь к файлу .txt
+     * @param cityList список городов для записи
+     * @param printResults выводить ли статистику в консоль
+     * @throws IOException если путь некорректен или произошла ошибка записи
+     */
     public void write(Path filePath, CityArrayList<City> cityList, boolean printResults) throws IOException {
         LongAdder count = new LongAdder();
         StandardOpenOption[] options = new StandardOpenOption[] {
