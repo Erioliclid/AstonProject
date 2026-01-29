@@ -1,10 +1,6 @@
 package files;
 
-import org.example.City;
-import org.example.CityArrayList;
-import org.example.ICityBuilder;
-import org.example.CityConcept;
-import org.example.CityDirector;
+import org.example.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -40,7 +36,7 @@ public class FileReader {
     }
 
     /** Создает объект класса City из распарсенных данных */
-    private City createCityObjFromParsedLine(Map<String, String> parsedLine) {
+    private City createCityObjFromParsedLine(Map<String, String> parsedLine) throws NotValidCityDataException {
         ICityBuilder concept = new CityConcept();
         CityDirector.converter(parsedLine.get(LineParser.KEY_NAME),
                 parsedLine.get(LineParser.KEY_POPULATION),
@@ -73,7 +69,7 @@ public class FileReader {
             } catch (IllegalArgumentException e) {
                 counter.incrementErrorLine();
                 logError(e, "Ошибка парсинга: ", line);
-            } catch (RuntimeException e) {
+            } catch (NotValidCityDataException e) {
                 counter.incrementErrorLine();
                 logError(e, "Ошибка создания объекта: ", line);
             }
