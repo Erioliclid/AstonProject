@@ -16,7 +16,7 @@ class GenCityTest {
     void name() {
         StringBuilder regExp = new StringBuilder();
 
-        ArrayList<String> regExpList = new ArrayList<String>();
+        ArrayList<String> regExpList = new ArrayList<>();
 
         for (Alphabet a: Alphabet.values()) {
             regExpList.add(a.getRegExp());
@@ -36,7 +36,7 @@ class GenCityTest {
     void population() {
         final int minPopulation = 250;
         final int maxPopulation = 100_000_000;
-        int feedback = 0;
+        int feedback;
 
         for (int i = 0; i < 1000; i++) {
             feedback = GenCity.population();
@@ -48,7 +48,7 @@ class GenCityTest {
     void year() {
         final int minYear = 1;
         final int maxYear = LocalDate.now().getYear();
-        int feedback = 0;
+        int feedback;
 
         for (int i = 0; i < 1000; i++) {
             feedback = GenCity.year();

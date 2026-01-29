@@ -1,10 +1,9 @@
 package org.example;
 
-import org.junit.Test;
+import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Objects;
-
-import static org.junit.Assert.*;
 
 public class CityTest {
 
