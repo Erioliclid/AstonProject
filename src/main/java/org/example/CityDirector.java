@@ -1,11 +1,12 @@
 package org.example;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class CityDirector {
 
-    public static enum RULE {
+    public enum RULE {
         UN, // ООН
         RU, // Россия
         UA, // Украина
@@ -17,7 +18,6 @@ public class CityDirector {
         IN, // Индия
         JP, // Япония
         DEFAULT // Без указания правил страны, равносильно выбору UN
-        ;
     }
     public static boolean validate(City city) {
         return validate(city, RULE.RU);
@@ -107,10 +107,14 @@ public class CityDirector {
         return converter(name, population, year, concept);
     }
 
-    public static City cityDevelopment(ICityBuilder concept) {
+    public static City cityDevelopment(ICityBuilder concept) throws NotValidCityDataException {
+        return cityDevelopment(concept, RULE.RU);
+    }
+
+    public static City cityDevelopment(ICityBuilder concept, RULE country) throws NotValidCityDataException {
         City newCity = concept.getCityAfterBuild();
-        if (!validate(newCity))
-            throw new RuntimeException("CityConcept: Invalid input data for building a class City");
+        if (!validate(newCity, country))
+            throw new NotValidCityDataException("cityDevelopment: input data for create object type City not valid");
         return newCity;
     }
 }
