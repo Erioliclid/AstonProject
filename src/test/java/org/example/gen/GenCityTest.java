@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import org.example.City;
-import org.example.NotValidCityDataException;
+import org.example.exception.NotValidCityDataException;
 import org.example.country.Alphabet;
 
 class GenCityTest {
@@ -23,8 +23,7 @@ class GenCityTest {
         }
 
         regExp.append('(').append(String.join("|", regExpList))
-                .append(')')
-                .append('+');
+                .append(")+");
 
         final String regExpString = regExp.toString();
         for (int i = 0; i < 1000; i++) {
