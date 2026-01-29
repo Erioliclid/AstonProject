@@ -79,9 +79,9 @@ public class CityConceptTest {
         assertNotNull(testObj2);
         assertNotNull(testObj3);
 
-        assertFalse(testObj2 == testObj3);
+        assertNotSame(testObj2, testObj3);
 
-        assertTrue(testObj2.equals(testObj3));
+        assertEquals(testObj2, testObj3);
         assertEquals(testObj2.hashCode(), testObj3.hashCode());
 
         testObj3 = testObj1
@@ -90,11 +90,7 @@ public class CityConceptTest {
                 .setYear(testInt1)
                 .getCityAfterBuild();
 
-        assertFalse(testObj2.equals(testObj3));
+        assertNotEquals(testObj2, testObj3);
         assertNotEquals(testObj2.hashCode(), testObj3.hashCode());
-
-        testObj3 = null;
-        testObj2 = null;
-        testObj1 = null;
     }
 }

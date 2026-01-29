@@ -129,8 +129,6 @@ public class CityDirectorTest {
 
     @Test
     public void checkName() {
-        CityDirector.RULE rule = CityDirector.RULE.DEFAULT;
-
         assertTrue(CityDirector.validate("Good", 12_000, 0));
         assertFalse(CityDirector.validate("", 12_000, 0));
         assertFalse(CityDirector.validate("_", 12_000, 0));
@@ -192,7 +190,7 @@ public class CityDirectorTest {
             assertEquals(obj1, obj2);
 
         } catch (NotValidCityDataException e) {
-            e.getMessage();
+            fail();
         }
     }
 }

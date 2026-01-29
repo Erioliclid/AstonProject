@@ -51,9 +51,9 @@ public class CityTest {
         City testObj4 = new City();
         Object testObj5 = new Object();
 
-        assertFalse(testObj1.equals(null));
-        assertTrue(testObj1.equals(testObj1));
-        assertFalse(testObj1.equals(testObj5));
+        assertNotEquals(null, testObj1);
+        assertEquals(testObj1, testObj1);
+        assertNotEquals(testObj1, testObj5);
 
         testObj1.setName("Test");
         testObj1.setPopulation(123456789);
@@ -63,27 +63,27 @@ public class CityTest {
         testObj3.setPopulation(123456789);
         testObj3.setYear(1234);
 
-        assertTrue(testObj1.equals(testObj3));
-        assertTrue(testObj3.equals(testObj1));
+        assertEquals(testObj1, testObj3);
+        assertEquals(testObj3, testObj1);
 
         testObj3.setName("Test-not");
-        assertFalse(testObj1.equals(testObj3));
-        assertFalse(testObj3.equals(testObj1));
+        assertNotEquals(testObj1, testObj3);
+        assertNotEquals(testObj3, testObj1);
 
         testObj4.setName(testObj1.getName());
         testObj4.setPopulation(testObj1.getPopulation());
         testObj4.setYear(testObj1.getYear());
 
-        assertTrue(testObj1.equals(testObj4));
+        assertEquals(testObj1, testObj4);
 
         testObj4.setPopulation(testObj4.getPopulation() - 1);
 
-        assertFalse(testObj1.equals(testObj4));
+        assertNotEquals(testObj1, testObj4);
 
         testObj4.setPopulation(testObj1.getPopulation());
         testObj4.setYear(testObj4.getYear() - 1);
 
-        assertFalse(testObj1.equals(testObj4));
+        assertNotEquals(testObj1, testObj4);
     }
 
     @Test
