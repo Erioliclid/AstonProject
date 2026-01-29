@@ -6,18 +6,21 @@ import java.util.concurrent.atomic.LongAdder;
  * Счетчик для учета статистики обработки строк.
  * Потокобезопасен, использует LongAdder для высокой производительности.
  */
-public final class LineCounter {
-    private final LongAdder lineCounter = new LongAdder();
+public class LineCounter {
+    private final LongAdder totalLines = new LongAdder();
+    private final LongAdder validLines = new LongAdder();
     private final LongAdder errorLineCounter = new LongAdder();
 
     /** Увеличивает счетчик обработанных строк на 1 */
     public void incrementLine() {
-        this.lineCounter.increment();
+        this.totalLines.increment();
     }
+
+    public void incrementValidLine() {this.validLines.increment();};
 
     /** Возвращает общее количество обработанных строк */
     public long getTotalLines() {
-        return this.lineCounter.sum();
+        return this.totalLines.sum();
     }
 
     /** Увеличивает счетчик строк с ошибками на 1 */
@@ -25,24 +28,25 @@ public final class LineCounter {
         this.errorLineCounter.increment();
     }
 
-    /** Возвращает количество строк с ошибками */
+    /** Возвращает количество ошибок парсинга строк или создания объекта */
     public long getErrorLines() {
         return this.errorLineCounter.sum();
     }
 
     /** Возвращает количество валидных строк */
     public long getValidLines() {
-        return getTotalLines() - getErrorLines();
+        return this.validLines.sum();
     }
 
     /** Сбрасывает все счетчики в 0 */
     public void reset() {
-        this.lineCounter.reset();
+        this.totalLines.reset();
+        this.validLines.reset();
         this.errorLineCounter.reset();
     }
 
     public String toString() {
-        return String.format("Всего строк: %d\nВалидных строк: %d\nОшибок формата: %d",
+        return String.format("Всего строк: %d\nВалидных строк: %d\nОшибок парсинга или создания объекта: %d",
                 getTotalLines(),
                 getValidLines(),
                 getErrorLines());

@@ -19,20 +19,20 @@ import java.util.stream.Stream;
 public class FileReader {
     private final LineParser parser;
     private final LineCounter counter;
-    private final CityArrayList<City> list;
+    private final ErrorLogger logger;
 
-    public FileReader() {
-        this.parser = new LineParser();
-        this.counter = new LineCounter();
-        this.list = new CityArrayList<>();
+    public FileReader(LineParser parser, LineCounter counter, ErrorLogger logger) {
+        this.parser = Objects.requireNonNull(parser);
+        this.counter = Objects.requireNonNull(counter);
+        this.logger = Objects.requireNonNull(logger);
     }
 
     /** Выводит статистику обработки в консоль */
-    private void printResultMessage() {
+    private void printResultMessage(long listSize) {
         System.out.println();
         System.out.println("Чтение файла завершено!");
         System.out.println(this.counter);
-        System.out.println("Объектов создано: " + this.list.size());
+        System.out.println("Объектов создано: " + listSize);
     }
 
     /** Создает объект класса City из распарсенных данных */
@@ -46,43 +46,28 @@ public class FileReader {
         return CityDirector.cityDevelopment(concept);
     }
 
-    /** Логирует ошибку */
-    private void logError(Exception e, String errorType, String line) {
-        String message = errorType + e.getMessage();
-        if (line != null) {
-            String truncated = line.length() > 30 ? line.substring(0, 30) + "..." : line;
-            message += " Строка: " + truncated;
-        }
-        System.err.println(message);
-    }
-
     /** Обрабатывает поток строк, заполняя this.list */
-    private void processLines(Stream<String> stream, LineCounter counter) {
-        stream.forEach(line -> {
-            counter.incrementLine();
-            try {
-                if (FileUtils.isValidLineFormat(line)) {
-                    Map<String, String> parsedLine = this.parser.parseLine(line);
-                    City city = createCityObjFromParsedLine(parsedLine);
-                    this.list.add(city);
-                } else counter.incrementErrorLine();
-            } catch (IllegalArgumentException e) {
-                counter.incrementErrorLine();
-                logError(e, "Ошибка парсинга: ", line);
-            } catch (NotValidCityDataException e) {
-                counter.incrementErrorLine();
-                logError(e, "Ошибка создания объекта: ", line);
-            }
-        });
-    }
-
-    /** Копирует список (поверхностное копирование) */
-    private CityArrayList<City> copyList(CityArrayList<City> source) {
-        CityArrayList<City> copy = new CityArrayList<>();
-        for (int i = 0; i < source.size(); i++) {
-            copy.add(source.get(i));
-        }
-        return copy;
+    private CityArrayList<City> processLines(Stream<String> stream, LineCounter counter) {
+        return stream
+                .peek(line -> counter.incrementLine())
+                .filter(FileUtils::isValidLineFormat)
+                .peek(line -> counter.incrementValidLine())
+                .map(line -> {
+                    try {
+                        Map<String, String> parsedLine = this.parser.parseLine(line);
+                        return createCityObjFromParsedLine(parsedLine);
+                    } catch (NotValidCityDataException e) {
+                        counter.incrementErrorLine();
+                        this.logger.logError(e, "Ошибка создания объекта: ", line);
+                        return null;
+                    } catch (IllegalArgumentException e) {
+                        counter.incrementErrorLine();
+                        this.logger.logError(e, "Ошибка парсинга: ", line);
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(CityArrayListCollector.toCityArrayList());
     }
 
     /**
@@ -98,16 +83,14 @@ public class FileReader {
             throw new IOException("Некорректный путь к файлу: " + filePath);
         }
         try (Stream<String> stream = Files.lines(filePath, StandardCharsets.UTF_8)) {
-            processLines(stream, this.counter);
+            CityArrayList<City> createdCityList = processLines(stream, this.counter);
             if (printResults) {
-                printResultMessage();
+                printResultMessage(createdCityList.size());
             }
-
-            // Копируем результат и очищаем this.list и this.counter
-            CityArrayList<City> resultList = copyList(this.list);
-            this.list.clear(); // возможна утечка памяти
+            return createdCityList;
+        }
+        finally {
             this.counter.reset();
-            return resultList;
         }
     }
 

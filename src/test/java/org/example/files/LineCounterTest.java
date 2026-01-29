@@ -34,12 +34,21 @@ class LineCounterTest {
         counter.incrementLine();
         assertEquals(1, counter.getTotalLines());
         assertEquals(0, counter.getErrorLines());
-        assertEquals(1, counter.getValidLines());
+        assertEquals(0, counter.getValidLines()); // Важно: valid не увеличивается автоматически
 
         counter.incrementLine();
         assertEquals(2, counter.getTotalLines());
         assertEquals(0, counter.getErrorLines());
-        assertEquals(2, counter.getValidLines());
+        assertEquals(0, counter.getValidLines());
+    }
+
+    @Test
+    @DisplayName("incrementValidLine увеличивает счетчик валидных строк")
+    void incrementValidLine_increasesValidCount() {
+        counter.incrementValidLine();
+        assertEquals(0, counter.getTotalLines());
+        assertEquals(0, counter.getErrorLines());
+        assertEquals(1, counter.getValidLines());
     }
 
     @Test
@@ -48,31 +57,28 @@ class LineCounterTest {
         counter.incrementErrorLine();
         assertEquals(0, counter.getTotalLines());
         assertEquals(1, counter.getErrorLines());
-        assertEquals(-1, counter.getValidLines()); // 0 - 1 = -1
+        assertEquals(0, counter.getValidLines());
     }
 
     @Test
-    @DisplayName("Комбинация incrementLine и incrementErrorLine")
+    @DisplayName("Комбинация всех инкрементов")
     void mixedIncrements_calculatesCorrectly() {
-        counter.incrementLine(); // строка 1 - валидная
-        counter.incrementLine(); // строка 2 - валидная
-        counter.incrementErrorLine(); // строка 3 - ошибка
-        counter.incrementLine(); // строка 4 - валидная
-
-        assertEquals(3, counter.getTotalLines());
-        assertEquals(1, counter.getErrorLines());
-        assertEquals(2, counter.getValidLines()); // 3 - 1 = 2
-    }
-
-    @Test
-    @DisplayName("reset обнуляет счетчики")
-    void reset_setsCountersToZero() {
-        counter.incrementLine();
-        counter.incrementLine();
-        counter.incrementErrorLine();
+        counter.incrementLine();      // total: 1, valid: 0, error: 0
+        counter.incrementValidLine(); // total: 1, valid: 1, error: 0
+        counter.incrementLine();      // total: 2, valid: 1, error: 0
+        counter.incrementErrorLine(); // total: 2, valid: 1, error: 1
 
         assertEquals(2, counter.getTotalLines());
         assertEquals(1, counter.getErrorLines());
+        assertEquals(1, counter.getValidLines());
+    }
+
+    @Test
+    @DisplayName("reset обнуляет все счетчики")
+    void reset_setsCountersToZero() {
+        counter.incrementLine();
+        counter.incrementValidLine();
+        counter.incrementErrorLine();
 
         counter.reset();
 
@@ -86,67 +92,89 @@ class LineCounterTest {
     void toString_returnsCorrectFormat() {
         counter.incrementLine();
         counter.incrementLine();
+        counter.incrementValidLine();
         counter.incrementErrorLine();
-        counter.incrementLine();
 
         String result = counter.toString();
 
-        assertTrue(result.contains("Всего строк: 3"));
-        assertTrue(result.contains("Валидных строк: 2"));
-        assertTrue(result.contains("Ошибок формата: 1"));
-    }
-
-    @Test
-    @DisplayName("Только ошибки (без incrementLine)")
-    void onlyErrors_withoutIncrementLine() {
-        counter.incrementErrorLine();
-        counter.incrementErrorLine();
-
-        assertEquals(0, counter.getTotalLines());
-        assertEquals(2, counter.getErrorLines());
-        assertEquals(-2, counter.getValidLines()); // 0 - 2 = -2
+        assertTrue(result.contains("Всего строк: 2"));
+        assertTrue(result.contains("Валидных строк: 1"));
+        assertTrue(result.contains("Ошибок парсинга или создания объекта: 1"));
     }
 
     @Test
     @DisplayName("Только валидные строки")
     void onlyValidLines() {
-        counter.incrementLine();
-        counter.incrementLine();
-        counter.incrementLine();
+        counter.incrementValidLine();
+        counter.incrementValidLine();
+        counter.incrementValidLine();
 
-        assertEquals(3, counter.getTotalLines());
+        assertEquals(0, counter.getTotalLines());
         assertEquals(0, counter.getErrorLines());
         assertEquals(3, counter.getValidLines());
+    }
+
+    @Test
+    @DisplayName("Только ошибки")
+    void onlyErrors() {
+        counter.incrementErrorLine();
+        counter.incrementErrorLine();
+
+        assertEquals(0, counter.getTotalLines());
+        assertEquals(2, counter.getErrorLines());
+        assertEquals(0, counter.getValidLines());
     }
 
     @Test
     @DisplayName("Большое количество операций")
     void largeNumberOfOperations() {
         for (int i = 0; i < 1000; i++) {
-            counter.incrementLine();
+            counter.incrementLine(); // 1000 total
+            counter.incrementValidLine(); // 1000 valid
             if (i % 10 == 0) {
-                counter.incrementErrorLine();
+                counter.incrementErrorLine(); // 100 errors
             }
         }
 
         assertEquals(1000, counter.getTotalLines());
-        assertEquals(100, counter.getErrorLines()); // 1000 / 10 = 100
-        assertEquals(900, counter.getValidLines());
+        assertEquals(100, counter.getErrorLines());
+        assertEquals(1000, counter.getValidLines());
     }
 
     @Test
-    @DisplayName("reset после использования")
+    @DisplayName("reset после использования работает корректно")
     void reset_afterUsage_worksCorrectly() {
+        // Первое использование
         counter.incrementLine();
+        counter.incrementValidLine();
         counter.incrementErrorLine();
         counter.reset();
 
-        // После reset можно снова использовать
+        // Второе использование после reset
         counter.incrementLine();
-        counter.incrementLine();
+        counter.incrementValidLine();
 
-        assertEquals(2, counter.getTotalLines());
+        assertEquals(1, counter.getTotalLines());
         assertEquals(0, counter.getErrorLines());
-        assertEquals(2, counter.getValidLines());
+        assertEquals(1, counter.getValidLines());
+    }
+
+    @Test
+    @DisplayName("Независимость счетчиков")
+    void countersAreIndependent() {
+        counter.incrementLine(); // влияет только на total
+        assertEquals(1, counter.getTotalLines());
+        assertEquals(0, counter.getValidLines());
+        assertEquals(0, counter.getErrorLines());
+
+        counter.incrementValidLine(); // влияет только на valid
+        assertEquals(1, counter.getTotalLines());
+        assertEquals(1, counter.getValidLines());
+        assertEquals(0, counter.getErrorLines());
+
+        counter.incrementErrorLine(); // влияет только на error
+        assertEquals(1, counter.getTotalLines());
+        assertEquals(1, counter.getValidLines());
+        assertEquals(1, counter.getErrorLines());
     }
 }
