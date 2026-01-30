@@ -2,7 +2,7 @@ package org.example.country;
 
 public enum Alphabet {
     EN ("[a-zA-Z]", 'a', 'z', 'A', 'Z'),
-    RU ("[а-яА-Я]", 'а', 'я', 'А', 'Я');
+    RU ("[а-яёА-ЯЁ]", 'а', 'я', 'А', 'Я');
 
     private final String letters;
     private final int id;
