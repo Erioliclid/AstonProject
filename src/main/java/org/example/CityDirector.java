@@ -83,7 +83,7 @@ public class CityDirector {
         Objects.requireNonNull(inputData[2]);
 
         String name = inputData[0];
-        if (!inputData[1].matches("\\d") || !inputData[2].matches("\\d"))
+        if (!inputData[1].matches("\\d+") || !inputData[2].matches("\\d+"))
             throw new NotValidCityDataException("CityDirector: converter(String[], ICityBuilder)");
 
         int population = Integer.parseInt(inputData[1]);
