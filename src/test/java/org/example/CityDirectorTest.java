@@ -172,8 +172,13 @@ public class CityDirectorTest {
                     .getCityAfterBuild();
             assertEquals(obj1, obj2);
         } catch (NotValidCityDataException e) {
-            assertEquals(obj1, obj2);
+            assertEquals(NotValidCityDataException.class, e.getClass());
         }
+
+        NotValidCityDataException thrown = assertThrows(NotValidCityDataException.class,
+                () -> CityDirector.converter("test", "19V65", "V20000", new CityConcept()));
+
+        assertEquals("CityDirector: converter(String[], ICityBuilder)", thrown.getMessage());
     }
 
     @Test
