@@ -7,10 +7,7 @@ import org.example.ICityBuilder;
 import org.example.country.Rule;
 import org.example.exception.NotValidCityDataException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Input {
     private static final String regExpSeparator = "[,;.|]";
@@ -19,15 +16,11 @@ public class Input {
 
     public static City getCity() throws NotValidCityDataException {
         Rule rule = Rule.RU;
-        List<String> tokens = new ArrayList<>();
-        int tokenQuantity = 3;
         String inputString = sc.nextLine();
 
-        tokens = Arrays.stream(inputString.split(regExpSeparator)).map(String::trim).toList();
+        List<String> tokens = Arrays.stream(inputString.split(regExpSeparator)).map(String::trim).toList();
 
-        tokens.forEach(System.out::println);
-
-        tokenQuantity = tokens.size();
+        int tokenQuantity = tokens.size();
         if (tokenQuantity == 3 || tokenQuantity == 4) {
             CityDirector.converter(tokens.get(0), tokens.get(1), tokens.get(2), concept);
             if (tokenQuantity == 4) {
@@ -35,13 +28,37 @@ public class Input {
                     rule = Rule.valueOf(tokens.get(3));
                 }
                 catch (IllegalArgumentException e) {
-                    throw new NotValidCityDataException(e);
+                    throw new NotValidCityDataException("tty.Input: getCity(): not correct two-letter country name code system, choice either RU or UN");
                 }
             }
         }
         else
-            throw new NotValidCityDataException("tty.Input: getCity()");
+            throw new NotValidCityDataException("tty.Input: getCity(): input string not valid for create a City object");
 
         return CityDirector.cityDevelopment(concept, rule);
     }
+
+    public static Optional<City> startOrder() throws NotValidCityDataException {
+        HelpMessage.format();
+        HelpMessage.invitation();
+        return Optional.of(getCity());
+    }
+
+    public static Optional<City> continueOrder() throws NotValidCityDataException {
+        HelpMessage.invitation();
+        return Optional.of(getCity());
+    }
+
+/*    public static void main(String[] args) {
+        Optional<City> ret = Optional.empty();
+        try {
+            ret = startOrder();
+        } catch (NotValidCityDataException e) {
+            System.out.println(e.getMessage());
+        }
+            if (ret.isPresent())
+                System.out.println(ret.get());
+            else
+                System.out.println("Fail");
+    }*/
 }
