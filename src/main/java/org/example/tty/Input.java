@@ -7,28 +7,32 @@ import org.example.ICityBuilder;
 import org.example.country.Rule;
 import org.example.exception.NotValidCityDataException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class Input {
+    private static final String regExpSeparator = "[,;.|]";
     private static final Scanner sc = new Scanner(System.in);
-    private static final String regExpSeparator = "(,|;|\\.|\\|)";
-//    private static final String w = "[\\w[^_]]";
-//    private static final String regExpName = w + "(" + w
     private static final ICityBuilder concept = new CityConcept();
 
     public static City getCity() throws NotValidCityDataException {
         Rule rule = Rule.RU;
+        List<String> tokens = new ArrayList<>();
+        int tokenQuantity = 3;
+        String inputString = sc.nextLine();
 
-        List<String> tokens = sc.useDelimiter(regExpSeparator).tokens().collect(Collectors.toList());
-        int tokenQuantity = tokens.size();
+        tokens = Arrays.stream(inputString.split(regExpSeparator)).map(String::trim).toList();
+
+        tokens.forEach(System.out::println);
+
+        tokenQuantity = tokens.size();
         if (tokenQuantity == 3 || tokenQuantity == 4) {
-            tokens.stream().forEach((s) -> s.trim());
-            CityDirector.converter(tokens.getFirst(), tokens.get(1), tokens.get(2), concept);
+            CityDirector.converter(tokens.get(0), tokens.get(1), tokens.get(2), concept);
             if (tokenQuantity == 4) {
                 try {
-                    rule = Rule.valueOf(tokens.getLast());
+                    rule = Rule.valueOf(tokens.get(3));
                 }
                 catch (IllegalArgumentException e) {
                     throw new NotValidCityDataException(e);
@@ -36,7 +40,7 @@ public class Input {
             }
         }
         else
-            throw new NotValidCityDataException("con.Input: getCity()");
+            throw new NotValidCityDataException("tty.Input: getCity()");
 
         return CityDirector.cityDevelopment(concept, rule);
     }
