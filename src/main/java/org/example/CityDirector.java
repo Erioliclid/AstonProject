@@ -43,7 +43,7 @@ public class CityDirector {
 
     private static boolean checkName(String name, Rule rule) {
         final String nameRegExp =
-                "^[a-zA-Zа-яА-Я]+($|(\\s-\\s|-|\\s)[a-zA-Zа-яА-Я]+)*($|(\\s-\\s|-)\\d+$)";
+                "^[a-zA-Zа-яёА-ЯЁ]+($|(\\s-\\s|-|\\s)[a-zA-Zа-яА-Я]+)*($|(\\s-\\s|-)\\d+$)";
 
         return !name.isEmpty() && name.matches(nameRegExp);
     }
