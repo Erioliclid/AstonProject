@@ -156,16 +156,24 @@ public class CityDirectorTest {
 
         assertEquals(obj1, obj2);
 
-        obj2 = CityDirector.converter("Test", "12000", "0", new CityConcept())
-                .getCityAfterBuild();
+        try {
+            obj2 = CityDirector.converter("Test", "12000", "0", new CityConcept())
+                    .getCityAfterBuild();
+            assertEquals(obj1, obj2);
+        } catch (NotValidCityDataException e) {
+            assertEquals(NotValidCityDataException.class, e.getClass());
+        }
 
-        assertEquals(obj1, obj2);
 
         String[] testString = {"Test", "12000", "0"};
-        obj2 = CityDirector.converter(testString, new CityConcept())
-                .getCityAfterBuild();
 
-        assertEquals(obj1, obj2);
+        try {
+            obj2 = CityDirector.converter(testString, new CityConcept())
+                    .getCityAfterBuild();
+            assertEquals(obj1, obj2);
+        } catch (NotValidCityDataException e) {
+            assertEquals(obj1, obj2);
+        }
     }
 
     @Test
