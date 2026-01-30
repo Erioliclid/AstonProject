@@ -43,7 +43,7 @@ public class CityDirector {
 
     private static boolean checkName(String name, Rule rule) {
         final String nameRegExp =
-                "^[a-zA-Zа-яА-Я]+($|(\\s\\-\\s|\\-)[a-zA-Zа-яА-Я]+)*($|(\\s\\-\\s|\\-)\\d+$)";
+                "^[a-zA-Zа-яА-Я]+($|(\\s-\\s|-)[a-zA-Zа-яА-Я]+)*($|(\\s-\\s|-)\\d+$)";
 
         return !name.isEmpty() && name.matches(nameRegExp);
     }
@@ -71,18 +71,21 @@ public class CityDirector {
         return concept;
     }
 
-    public static ICityBuilder converter(String name, String population, String year, ICityBuilder concept) {
+    public static ICityBuilder converter(String name, String population, String year, ICityBuilder concept) throws NotValidCityDataException {
         String[] inputData = {name, population, year};
         return converter(inputData, concept);
     }
 
-    public static ICityBuilder converter(String[] inputData, ICityBuilder concept) {
+    public static ICityBuilder converter(String[] inputData, ICityBuilder concept) throws NotValidCityDataException {
         Objects.requireNonNull(inputData);
         Objects.requireNonNull(inputData[0]);
         Objects.requireNonNull(inputData[1]);
         Objects.requireNonNull(inputData[2]);
 
         String name = inputData[0];
+        if (!inputData[1].matches("\\d") || !inputData[2].matches("\\d"))
+            throw new NotValidCityDataException("CityDirector: converter(String[], ICityBuilder)");
+
         int population = Integer.parseInt(inputData[1]);
         int year = Integer.parseInt(inputData[2]);
 
