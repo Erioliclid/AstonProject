@@ -142,6 +142,10 @@ public class CityDirectorTest {
         assertTrue(CityDirector.validate("Test-Test-Test-16", 12_000, 0));
         assertFalse(CityDirector.validate("Test-Test-Test16", 12_000, 0));
         assertFalse(CityDirector.validate("Test-Test-Test 16", 12_000, 0));
+        assertTrue(CityDirector.validate("Орёл", 12_000, 0));
+        assertTrue(CityDirector.validate("Нижний Новгород", 12_000, 0));
+        assertFalse(CityDirector.validate("Ор3л", 12_000, 0));
+        assertFalse(CityDirector.validate("Ор_л", 12_000, 0));
     }
 
     @Test
