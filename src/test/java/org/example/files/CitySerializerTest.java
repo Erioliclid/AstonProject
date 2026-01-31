@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.*;
 
 import files.CitySerializer;
+import org.example.exception.NotValidCityDataException;
 
 /**
  * Тесты для класса CitySerializer

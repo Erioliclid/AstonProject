@@ -58,6 +58,9 @@
                 <configuration>
                     <argLine>-Dfile.encoding=UTF-8</argLine>
                     <printSummary>true</printSummary>
+                    <systemPropertyVariables>
+                        <file.encoding>UTF-8</file.encoding>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>

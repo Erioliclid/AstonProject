@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import files.*;
 import org.example.CityArrayList.CityArrayList;
+import org.example.exception.NotValidCityDataException;
 
 /**
  * Основные тесты для класса FileWriter
