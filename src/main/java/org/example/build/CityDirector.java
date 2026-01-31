@@ -1,5 +1,6 @@
-package org.example;
+package org.example.build;
 
+import org.example.City;
 import org.example.exception.NotValidCityDataException;
 import org.example.country.Rule;
 
@@ -62,7 +63,7 @@ public class CityDirector {
         return year > lowLimit && year <= highLimit;
     }
 
-    public static ICityBuilder converter(String name, int population, int year,  ICityBuilder concept) {
+    public static ICityBuilder converter(String name, int population, int year, ICityBuilder concept) {
         concept
                 .setName(name)
                 .setPopulation(population)

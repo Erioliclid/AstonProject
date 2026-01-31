@@ -1,4 +1,6 @@
-package org.example;
+package org.example.build;
+
+import org.example.City;
 
 public interface ICityBuilder {
 
