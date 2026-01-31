@@ -12,7 +12,7 @@ class AlphabetTest {
     @Test
     void getRegExp() {
         assertEquals("[a-zA-Z]", Alphabet.EN.getRegExp());
-        assertEquals("[а-яА-Я]", Alphabet.RU.getRegExp());
+        assertEquals("[а-яёА-ЯЁ]", Alphabet.RU.getRegExp());
     }
 
     @Test
