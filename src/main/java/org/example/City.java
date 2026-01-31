@@ -9,14 +9,14 @@ public class City {
 
     private volatile int hashCode;
 
-    City() {
+    public City() {
     }
 
     public String getName() {
         return name;
     }
 
-    void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -24,7 +24,7 @@ public class City {
         return population;
     }
 
-    void setPopulation(int population) {
+    public void setPopulation(int population) {
         this.population = population;
     }
 
@@ -32,7 +32,7 @@ public class City {
         return year;
     }
 
-    void setYear(int year) {
+    public void setYear(int year) {
         this.year = year;
     }
 
