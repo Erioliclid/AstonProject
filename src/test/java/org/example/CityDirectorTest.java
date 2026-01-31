@@ -183,6 +183,18 @@ public class CityDirectorTest {
                 () -> CityDirector.converter("test", "19V65", "V20000", new CityConcept()));
 
         assertEquals("CityDirector: converter(String[], ICityBuilder)", thrown.getMessage());
+
+        testString[0] = "Псков";
+        testString[1] = "193082";
+        testString[2] = "-903";
+
+        ICityBuilder concept = new CityConcept();
+        try {
+            assertNotNull(CityDirector.converter(testString, concept));
+        }
+        catch (NotValidCityDataException e) {
+            fail();
+        }
     }
 
     @Test
