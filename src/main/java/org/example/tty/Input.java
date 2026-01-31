@@ -1,9 +1,9 @@
 package org.example.tty;
 
 import org.example.City;
-import org.example.CityConcept;
-import org.example.CityDirector;
-import org.example.ICityBuilder;
+import org.example.build.CityConcept;
+import org.example.build.CityDirector;
+import org.example.build.ICityBuilder;
 import org.example.country.Rule;
 import org.example.exception.NotValidCityDataException;
 

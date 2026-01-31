@@ -1,6 +1,9 @@
 package org.example.gen;
 
 import org.example.*;
+import org.example.build.CityConcept;
+import org.example.build.CityDirector;
+import org.example.build.ICityBuilder;
 import org.example.country.Alphabet;
 import org.example.country.Rule;
 import org.example.exception.NotValidCityDataException;
