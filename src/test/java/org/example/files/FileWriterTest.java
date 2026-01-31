@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import static org.junit.jupiter.api.Assertions.*;
 
 import files.*;
+import org.example.CityArrayList.CityArrayList;
 
 /**
  * Основные тесты для класса FileWriter

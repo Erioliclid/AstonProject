@@ -1,7 +1,7 @@
 package files;
 
 import org.example.City;
-import org.example.CityArrayList;
+import org.example.CityArrayList.CityArrayList;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

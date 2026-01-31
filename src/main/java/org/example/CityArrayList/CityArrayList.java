@@ -1,4 +1,6 @@
-package org.example;
+package org.example.CityArrayList;
+
+import org.example.City;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -8,7 +10,7 @@ public class CityArrayList<T> implements Iterable<T> {
 
     private final int INIT_CAPACITY = 12;
 
-    private int capacity = 0;
+    private int capacity;
     private Object[] array;
     private int size = 0;
 

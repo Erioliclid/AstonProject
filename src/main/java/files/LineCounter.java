@@ -16,7 +16,7 @@ public class LineCounter {
         this.totalLines.increment();
     }
 
-    public void incrementValidLine() {this.validLines.increment();};
+    public void incrementValidLine() {this.validLines.increment();}
 
     /** Возвращает общее количество обработанных строк */
     public long getTotalLines() {
