@@ -30,18 +30,18 @@ public class CityDirector {
     }
 
     private static boolean validator(City city, Rule rule) {
-        return checkName(city.getName(), rule)
+        return checkName(city.getName())
                 && checkPopulation(city.getPopulation(), rule)
                 && checkYear(city.getYear());
     }
 
     private static boolean validator(String name, int population, int year, Rule rule) {
-        return checkName(name, rule)
+        return checkName(name)
                 && checkPopulation(population, rule)
                 && checkYear(year);
     }
 
-    private static boolean checkName(String name, Rule rule) {
+    private static boolean checkName(String name) {
         final String nameRegExp =
                 "^[a-zA-Zа-яёА-ЯЁ]+($|(\\s-\\s|-|\\s)[a-zA-Zа-яА-Я]+)*($|(\\s-\\s|-)\\d+$)";
 
