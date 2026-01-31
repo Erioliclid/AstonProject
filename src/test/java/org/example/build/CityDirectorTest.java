@@ -1,5 +1,6 @@
-package org.example;
+package org.example.build;
 
+import org.example.City;
 import org.example.exception.NotValidCityDataException;
 import org.example.country.Rule;
 
