@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 public class MergeSortTest {
 
-    private MergeSort mergeSort = new MergeSort();
+    private final MergeSort mergeSort = new MergeSort();
 
     @Test
     public void testSortEmptyList() {
