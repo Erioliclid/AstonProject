@@ -1,14 +1,15 @@
 package org.example.Sorting;
 
-import java.util.ArrayList;
 import org.example.City;
+import org.example.CityArrayList.CityArrayList;
 
 public class MergeSortAdditional {
-    public ArrayList<City> sortEvenValues(ArrayList<City> list, ComparatorStrategy comparator) {
-        ArrayList<City> evenCities = new ArrayList<>();
-        ArrayList<City> oddCities = new ArrayList<>();
+    public CityArrayList<City> sortEvenValues(CityArrayList<City> list, ComparatorStrategy comparator) {
+        CityArrayList<City> evenCities = new CityArrayList<>();
+        CityArrayList<City> oddCities = new CityArrayList<>();
 
-        for (City city : list) {
+        for (int i = 0; i < list.size(); i++) {
+            City city = list.get(i);
             if (city.getPopulation() % 2 == 0) {
                 evenCities.add(city);
             } else {
@@ -18,11 +19,16 @@ public class MergeSortAdditional {
 
         evenCities = new MergeSort().sort(evenCities, comparator);
 
-        ArrayList<City> sortedList = new ArrayList<>(list);
+        CityArrayList<City> sortedList = new CityArrayList<>(list.size());
+        for (int i = 0; i < list.size(); i++) {
+            sortedList.add(list.get(i));
+        }
+
         int evenIndex = 0;
         for (int i = 0; i < sortedList.size(); i++) {
             if (sortedList.get(i).getPopulation() % 2 == 0) {
-                sortedList.set(i, evenCities.get(evenIndex++));
+                sortedList.put(evenCities.get(evenIndex), i);
+                evenIndex++;
             }
         }
 
