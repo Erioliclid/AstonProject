@@ -34,4 +34,18 @@ public class City {
     public void setYear(int year) {
         this.year = year;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.name == ((City) obj).name;
+    }
+
+    @Override
+    public String toString() {
+        return "City{" +
+                "name='" + name + '\'' +
+                ", population=" + population +
+                ", year=" + year +
+                '}';
+    }
 }
