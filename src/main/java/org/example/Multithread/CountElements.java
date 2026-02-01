@@ -1,4 +1,6 @@
-package org.example;
+package org.example.Multithread;
+
+import org.example.CityArrayList.CityArrayList;
 
 public class CountElements{
 
