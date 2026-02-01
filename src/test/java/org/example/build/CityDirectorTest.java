@@ -1,5 +1,6 @@
-package org.example;
+package org.example.build;
 
+import org.example.City;
 import org.example.exception.NotValidCityDataException;
 import org.example.country.Rule;
 
@@ -142,6 +143,10 @@ public class CityDirectorTest {
         assertTrue(CityDirector.validate("Test-Test-Test-16", 12_000, 0));
         assertFalse(CityDirector.validate("Test-Test-Test16", 12_000, 0));
         assertFalse(CityDirector.validate("Test-Test-Test 16", 12_000, 0));
+        assertTrue(CityDirector.validate("Орёл", 12_000, 0));
+        assertTrue(CityDirector.validate("Нижний Новгород", 12_000, 0));
+        assertFalse(CityDirector.validate("Ор3л", 12_000, 0));
+        assertFalse(CityDirector.validate("Ор_л", 12_000, 0));
     }
 
     @Test
@@ -179,6 +184,18 @@ public class CityDirectorTest {
                 () -> CityDirector.converter("test", "19V65", "V20000", new CityConcept()));
 
         assertEquals("CityDirector: converter(String[], ICityBuilder)", thrown.getMessage());
+
+        testString[0] = "Псков";
+        testString[1] = "193082";
+        testString[2] = "-903";
+
+        ICityBuilder concept = new CityConcept();
+        try {
+            assertNotNull(CityDirector.converter(testString, concept));
+        }
+        catch (NotValidCityDataException e) {
+            fail();
+        }
     }
 
     @Test

@@ -1,5 +1,6 @@
-package org.example;
+package org.example.build;
 
+import org.example.City;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
