@@ -1,14 +1,15 @@
 package org.example;
 
+import java.util.Objects;
+
 public class City {
     private String name;
     private int population;
     private int year;
 
-    public City(String name, int population, int year) {
-        this.name = name;
-        this.population = population;
-        this.year = year;
+    private volatile int hashCode;
+
+    public City() {
     }
 
     public String getName() {
@@ -36,16 +37,31 @@ public class City {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return this.name == ((City) obj).name;
+    public String toString() {
+        return "City name: " + name + "\n" +
+                "Population: " + population + "\n" +
+                "Year of foundation: " + year + "\n";
     }
 
     @Override
-    public String toString() {
-        return "City{" +
-                "name='" + name + '\'' +
-                ", population=" + population +
-                ", year=" + year +
-                '}';
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof City secondCity)) return false;
+
+        return population == secondCity.population
+                && year == secondCity.year
+                && name.equalsIgnoreCase(secondCity.name);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = hashCode;
+        if (result == 0) {
+            result = Objects.hash(population, year);
+            result = result*31 + name.hashCode();
+            hashCode = result;
+        }
+        return result;
     }
 }
+
