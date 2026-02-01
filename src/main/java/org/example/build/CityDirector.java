@@ -103,6 +103,7 @@ public class CityDirector {
     /**
      * Проверяет переданную строку на соответствие определенному шаблону, который определяет определенную структуру и
      * набор символов для названия города.
+     *
      * @param name название города
      * @return true - проверка прошла успешно, false - проверка прошла неудачно
      */
@@ -118,7 +119,7 @@ public class CityDirector {
      * применяемого правила, можно охарактеризовать как "в какой стране находится город". Стандартным правилом является
      * Rule.RU (Россия). Верхний предел ограничен значением 100_000_000.
      *
-     * @param population численность населения
+     * @param population численность населения города
      * @param rule элемент перечисления Rule
      * @return true - проверка прошла успешно, false - проверка прошла неудачно
      */
@@ -131,7 +132,7 @@ public class CityDirector {
 
     /**
      * Проверяет на корректность год основания города. Год до н.э. обозначается отрицательным значение числа, РХ - 0,
-     * года в н.э. обозначается положительным числом. Нижний предел задания является -20_000, верхним пределом является
+     * года н.э. обозначается положительным числом. Нижний предел задания является -20_000, верхним пределом является
      * значение текущего года.
      *
      * @param year год основания города
@@ -144,6 +145,15 @@ public class CityDirector {
         return year > lowLimit && year <= highLimit;
     }
 
+    /**
+     * Преобразовывает данные в формате (String, int, int) в объект реализующий интерфейс ICityBuilder - концепт.
+     *
+     * @param name название города
+     * @param population численность населения города
+     * @param year год основания города
+     * @param concept концепт "постройки" города
+     * @return объект реализующий интерфейс ICityBuilder
+     */
     public static ICityBuilder converter(String name, int population, int year, ICityBuilder concept) {
         concept
                 .setName(name)
@@ -153,11 +163,31 @@ public class CityDirector {
         return concept;
     }
 
+    /**
+     * Преобразовывает данные в формате (String, String, String) в объект реализующий интерфейс ICityBuilder - концепт.
+     *
+     * @param name название города
+     * @param population численность населения города
+     * @param year       год основания города
+     * @param concept    концепт "постройки" города
+     * @return концепт "постройки" города, объект реализующий интерфейс ICityBuilder
+     * @throws NotValidCityDataException в случае, когда @param population и/или @param year не являются числовыми значениями
+     */
     public static ICityBuilder converter(String name, String population, String year, ICityBuilder concept) throws NotValidCityDataException {
         String[] inputData = {name, population, year};
         return converter(inputData, concept);
     }
 
+    /**
+     * Преобразовывает данные в формате String[3] в объект реализующий интерфейс ICityBuilder - концепт.
+     *
+     * @param inputData массив String[] содержащий 3 указателя на строки String. String[0] - название города. String[1] - численность населения города,
+     *                  числовое значение. String[2] - год основания города, числовое значение.
+     *
+     * @param concept   концепт "постройки" города
+     * @return концепт "постройки" города, объект реализующий интерфейс ICityBuilder
+     * @throws NotValidCityDataException в случае, когда @param inputData[1] и/или @param inputData[2] не являются числовыми значениями
+     */
     public static ICityBuilder converter(String[] inputData, ICityBuilder concept) throws NotValidCityDataException {
         Objects.requireNonNull(inputData);
         Objects.requireNonNull(inputData[0]);
@@ -174,10 +204,29 @@ public class CityDirector {
         return converter(name, population, year, concept);
     }
 
+    /**
+     * Основной метод для создания/выпуска объектов City, требует подготовленный концепт города, при успешной валидации
+     * данных концепта происходит создание объекта City с данными аналогичными данным концепта. В данном методе применяются
+     * правила Rule.RU - Россия.
+     *
+     * @param concept концепт "постройки" города
+     * @return объект City
+     * @throws NotValidCityDataException в случае, если концепт содержит данные, которые для города недопустимы
+     */
     public static City cityDevelopment(ICityBuilder concept) throws NotValidCityDataException {
         return cityDevelopment(concept, Rule.RU);
     }
 
+    /**
+     * Основной метод для создания/выпуска объектов City, требует подготовленный концепт города и указание страны, чьи
+     * правила следует применять валидации данных концепта перед созданием объекта City. Перечень возможных стран
+     * расположен в country.Rule.
+     *
+     * @param concept концепт "постройки" города
+     * @param country двухбуквенный код страны из класса перечисления country.Rule
+     * @return объект City
+     * @throws NotValidCityDataException в случае, если концепт содержит данные, которые для города недопустимы
+     */
     public static City cityDevelopment(ICityBuilder concept, Rule country) throws NotValidCityDataException {
         City newCity = concept.getCityAfterBuild();
         if (!validate(newCity, country))
