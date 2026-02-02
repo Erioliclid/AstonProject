@@ -2,7 +2,7 @@ package org.example.menu;
 
 import org.example.City;
 import org.example.appConfig.AppState;
-
+import org.example.appConfig.CityInputService;
 
 import java.util.Scanner;
 
@@ -11,10 +11,12 @@ import static org.example.menu.MenuPrint.*;
 public class Menu {
     private final Scanner scanner;
     private final AppState appState;
+    private final CityInputService cityInputService;
 
     public Menu() {
         this.scanner = new Scanner(System.in);
         this.appState = new AppState();
+        this.cityInputService = new CityInputService(appState, scanner);
     }
 
     public void mainMenu() {
@@ -76,6 +78,7 @@ public class Menu {
             case "1":
                 System.out.println("Выбран ввод вручную");
                 //Вызов метода ввода
+                cityInputService.inputLoop();
                 break;
             case "2":
                 System.out.println("Генерирую случайные данные");
