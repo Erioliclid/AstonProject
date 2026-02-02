@@ -2,7 +2,7 @@ package org.example.gen;
 
 import org.example.City;
 import org.example.CityArrayList.CityArrayList;
-import org.example.CityArrayListCollector;
+import org.example.CityArrayList.CityArrayListCollector;
 import org.example.exception.NotValidCityDataException;
 
 import java.util.Objects;
@@ -22,7 +22,7 @@ public class GenerateCityList {
     public CityArrayList<City> get(int quantity) {
         CityArrayList<City> cityList;
 
-        Function<Integer, City> task2 = new Function<Integer, City>() {
+        Function<Integer, City> task2 = new Function<>() {
             @Override
             public City apply(Integer i) {
                 City newGeneratedCity = null;
