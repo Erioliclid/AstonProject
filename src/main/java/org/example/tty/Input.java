@@ -7,6 +7,8 @@ import org.example.build.ICityBuilder;
 import org.example.country.Rule;
 import org.example.exception.NotValidCityDataException;
 
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.*;
 
 public class Input {
@@ -49,16 +51,9 @@ public class Input {
         return Optional.of(getCity());
     }
 
-/*    public static void main(String[] args) {
-        Optional<City> ret = Optional.empty();
-        try {
-            ret = startOrder();
-        } catch (NotValidCityDataException e) {
-            System.out.println(e.getMessage());
-        }
-            if (ret.isPresent())
-                System.out.println(ret.get());
-            else
-                System.out.println("Fail");
-    }*/
+    public static Path fileName() {
+        HelpMessage.fileName();
+        String pathString = sc.nextLine().trim();
+        return FileSystems.getDefault().getPath(pathString);
+    }
 }
