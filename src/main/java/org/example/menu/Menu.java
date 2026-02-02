@@ -162,9 +162,9 @@ public class Menu {
     }
 
     private void clear() {
-        for (int i = 0; i < 30; i++) {
-            System.out.println();
-        }
+        final String escConsoleClear = "\u001B[2J";
+
+        System.out.println(escConsoleClear);
     }
 
 
