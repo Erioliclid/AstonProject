@@ -2,6 +2,8 @@ package org.example.tty;
 
 public class HelpMessage {
     public static void format() {
+        //Предлагаю изменить формат данных понятные для пользователья сделать
+        // + Назачение полей сделать первой строкой
         System.out.println("Формат входных данных: S d I d I [d S]");
         System.out.println("Где:\n\tS - строка, тип String;\n\tI - число, тип int\n"
                 + "\td - разделитель полей, допустимые символы: . , ; |\n"

@@ -1,7 +1,9 @@
 package org.example.menu;
 
 import org.example.City;
+import org.example.CityArrayList.CityArrayList;
 import org.example.appConfig.AppState;
+import org.example.appConfig.CityGeneratorService;
 import org.example.appConfig.CityInputService;
 
 import java.util.Scanner;
@@ -12,19 +14,21 @@ public class Menu {
     private final Scanner scanner;
     private final AppState appState;
     private final CityInputService cityInputService;
+    private final CityGeneratorService cityGeneratorService;
 
     public Menu() {
         this.scanner = new Scanner(System.in);
         this.appState = new AppState();
         this.cityInputService = new CityInputService(appState, scanner);
+        this.cityGeneratorService = new CityGeneratorService(appState, scanner);
     }
 
     public void mainMenu() {
         clear();
         System.out.println(MAIN_MENU_PRINT);
         if (appState.isCityLoaded()) {
-            City[] cities = appState.getCurrentCities();
-            System.out.println("Загружено городов: " + cities.length);
+            CityArrayList<City> cities = appState.getCurrentCities();
+            System.out.println("Загружено городов: " + cities.size());
         }
         System.out.println("Выберите нужный пункт: ");
     }
@@ -59,6 +63,15 @@ public class Menu {
                     threadCounting();
                 }
                 break;
+            case "5":
+                if (!appState.isCityLoaded()) {
+                    System.out.println("Нет загруженных городов");
+                    waitingForEnter();
+                } else {
+                    showAllCities();
+                    waitingForEnter();
+                }
+                break;
             case "0":
                 System.out.println("Выход из приложения");
                 return false;
@@ -83,6 +96,7 @@ public class Menu {
             case "2":
                 System.out.println("Генерирую случайные данные");
                 //Вызов метода рандома
+                cityGeneratorService.generateRandomCities();
                 break;
             case "3":
                 System.out.println("Загрузка из файла..");
@@ -100,8 +114,8 @@ public class Menu {
         clear();
         System.out.println(SORT_MENU_PRINT);
         if (appState.isCityLoaded()) {
-            City[] cities = appState.getCurrentCities();
-            System.out.println("Количество городов: " + cities.length + " дя сортировки");
+            CityArrayList<City> cities = appState.getCurrentCities();
+            System.out.println("Количество городов: " + cities.size() + " дя сортировки");
         }
         System.out.println("Выберите нужный пункт: ");
         String choice = scanner.nextLine().trim();
@@ -156,6 +170,22 @@ public class Menu {
         // ??
     }
 
+    private void showAllCities() {
+        clear();
+        CityArrayList<City> cities = appState.getCurrentCities();
+        System.out.println("Список городов");
+        if (cities.isEmpty()) {
+            System.out.println("Список пустой");
+            waitingForEnter();
+            return;
+        }
+        for (int i = 0; i < cities.size(); i++) {
+            City city = cities.get(i);
+            System.out.println(city.toString());
+        }
+    }
+
+
     private void waitingForEnter() {
         System.out.println("Нажмите Enter для продолжения");
         scanner.nextLine();
@@ -166,8 +196,4 @@ public class Menu {
             System.out.println();
         }
     }
-
-
 }
-// вывод для многопоточки?
-// слияние и добавление методов
