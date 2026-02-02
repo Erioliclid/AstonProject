@@ -36,3 +36,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+/src/main/java/files/testFile.txt
+/src/main/java/files/MyFiles.java
