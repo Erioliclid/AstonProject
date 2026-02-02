@@ -1,6 +1,7 @@
 package org.example.appConfig;
 
 import org.example.City;
+import org.example.CityArrayList.CityArrayList;
 import org.example.exception.NotValidCityDataException;
 import org.example.tty.Input;
 
@@ -16,10 +17,8 @@ public class CityInputService {
     }
 
     public void inputLoop() {
-        List<City> citiesList = new ArrayList<>();
-        if (appState.isCityLoaded()) {
-            citiesList.addAll(Arrays.asList(appState.getCurrentCities()));
-        }
+        CityArrayList<City> citiesList = appState.getCurrentCities();
+
         boolean isFirstCity = true;
         boolean continueInput = true;
 
@@ -64,9 +63,7 @@ public class CityInputService {
             }
         }
         if (!citiesList.isEmpty()) {
-            City[] citiesArray = citiesList.toArray(new City[0]);
-            appState.setCurrentCities(citiesArray);
-            System.out.println("Загружено городов: " + citiesArray.length);
+            System.out.println("Загружено городов: " + citiesList.size());
         } else {
             System.out.println("Список городов пуст");
         }
