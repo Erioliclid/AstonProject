@@ -1,4 +1,4 @@
-package files;
+package org.example.files;
 
 import java.util.concurrent.atomic.LongAdder;
 

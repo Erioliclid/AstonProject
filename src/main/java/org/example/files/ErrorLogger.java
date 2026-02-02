@@ -1,4 +1,4 @@
-package files;
+package org.example.files;
 
 public class ErrorLogger {
     /** Логирует ошибку */

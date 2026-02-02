@@ -9,8 +9,6 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import files.FileUtils;
-
 /**
  * Тесты для класса FileUtils
  */

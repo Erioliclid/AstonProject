@@ -11,8 +11,6 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import files.*;
-
 /**
  * Основные тесты для класса FileReader с JUnit 6
  */
