@@ -5,6 +5,7 @@ import org.example.CityArrayList.CityArrayList;
 import org.example.appConfig.AppState;
 import org.example.appConfig.CityGeneratorService;
 import org.example.appConfig.CityInputService;
+import org.example.appConfig.FileReadService;
 
 import java.util.Scanner;
 
@@ -15,12 +16,14 @@ public class Menu {
     private final AppState appState;
     private final CityInputService cityInputService;
     private final CityGeneratorService cityGeneratorService;
+    private final FileReadService fileReadService;
 
     public Menu() {
         this.scanner = new Scanner(System.in);
         this.appState = new AppState();
         this.cityInputService = new CityInputService(appState, scanner);
         this.cityGeneratorService = new CityGeneratorService(appState, scanner);
+        this.fileReadService = new FileReadService(appState, scanner);
     }
 
     public void mainMenu() {
@@ -101,6 +104,7 @@ public class Menu {
             case "3":
                 System.out.println("Загрузка из файла..");
                 //Вызов загрузки
+                fileReadService.fileRead();
                 break;
             case "0":
                 return;
