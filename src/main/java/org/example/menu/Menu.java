@@ -16,6 +16,7 @@ public class Menu {
     private final CityGeneratorService cityGeneratorService;
     private final CityFileService cityFileService;
     private final CitySortingService citySortingService;
+    private final CityThreadService cityThreadService;
 
     public Menu() {
         this.scanner = new Scanner(System.in);
@@ -24,6 +25,7 @@ public class Menu {
         this.cityGeneratorService = new CityGeneratorService(appState, scanner);
         this.cityFileService = new CityFileService(appState, scanner);
         this.citySortingService = new CitySortingService(appState, scanner);
+        this.cityThreadService = new CityThreadService(appState, scanner);
     }
 
     public void mainMenu() {
@@ -167,8 +169,16 @@ public class Menu {
     }
 
     private void threadCounting() {
+        clear();
         System.out.println("Многопоточный подсчет");
-        // ??
+        if(!appState.isCityLoaded()){
+            System.out.println("Для использования загрузите данные");
+            waitingForEnter();
+            return;
+        }
+        System.out.println("Подсчет по названию города");
+        cityThreadService.countElement();
+        waitingForEnter();
     }
 
     private void showAllCities() {
