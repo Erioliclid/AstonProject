@@ -35,7 +35,6 @@ public class CityGeneratorService {
             }
             System.out.println("Генерирую города с использованием стрима");
             Stream<City> cityStream = IntStream.range(0, count)
-                    .parallel()
                     .mapToObj(i -> {
                         try {
                             return GenCity.get();
