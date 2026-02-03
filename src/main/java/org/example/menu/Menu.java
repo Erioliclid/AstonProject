@@ -3,8 +3,10 @@ package org.example.menu;
 import org.example.City;
 import org.example.CityArrayList.CityArrayList;
 import org.example.appConfig.AppState;
+import org.example.appConfig.CityFileService;
 import org.example.appConfig.CityGeneratorService;
 import org.example.appConfig.CityInputService;
+
 
 import java.util.Scanner;
 
@@ -15,12 +17,14 @@ public class Menu {
     private final AppState appState;
     private final CityInputService cityInputService;
     private final CityGeneratorService cityGeneratorService;
+    private final CityFileService cityFileService;
 
     public Menu() {
         this.scanner = new Scanner(System.in);
         this.appState = new AppState();
         this.cityInputService = new CityInputService(appState, scanner);
         this.cityGeneratorService = new CityGeneratorService(appState, scanner);
+        this.cityFileService = new CityFileService(appState, scanner);
     }
 
     public void mainMenu() {
@@ -90,17 +94,15 @@ public class Menu {
         switch (choice) {
             case "1":
                 System.out.println("Выбран ввод вручную");
-                //Вызов метода ввода
                 cityInputService.inputLoop();
                 break;
             case "2":
                 System.out.println("Генерирую случайные данные");
-                //Вызов метода рандома
                 cityGeneratorService.generateRandomCities();
                 break;
             case "3":
                 System.out.println("Загрузка из файла..");
-                //Вызов загрузки
+                cityFileService.loadFile();
                 break;
             case "0":
                 return;
@@ -151,11 +153,11 @@ public class Menu {
         switch (choice) {
             case "1":
                 System.out.println("Сохранение файла..");
-                //Впихнуть метод сохранения
+                cityFileService.saveToFile();
                 break;
             case "2":
                 System.out.println("Добавление данных в файл..");
-                //Впихнуть метод добавления
+                cityFileService.saveToFile();
                 break;
             case "0":
                 return;
