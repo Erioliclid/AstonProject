@@ -48,8 +48,7 @@ class CountElementsTest {
     void count() {
         CountElements.count(this.cityArrayList, city1);
 
-        assertTrue(true);
-//        assertTrue(outContent.toString().contains("Element City{name='A', population=100000, year=1234} have been found 1 times"));
+        assertEquals(CountElements.getTotalCount(), 1);
     }
 
     private City createTestCity(Object... data) {
