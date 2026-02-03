@@ -2,10 +2,7 @@ package org.example.menu;
 
 import org.example.City;
 import org.example.CityArrayList.CityArrayList;
-import org.example.appConfig.AppState;
-import org.example.appConfig.CityFileService;
-import org.example.appConfig.CityGeneratorService;
-import org.example.appConfig.CityInputService;
+import org.example.appConfig.*;
 
 
 import java.util.Scanner;
@@ -18,6 +15,7 @@ public class Menu {
     private final CityInputService cityInputService;
     private final CityGeneratorService cityGeneratorService;
     private final CityFileService cityFileService;
+    private final CitySortingService citySortingService;
 
     public Menu() {
         this.scanner = new Scanner(System.in);
@@ -25,6 +23,7 @@ public class Menu {
         this.cityInputService = new CityInputService(appState, scanner);
         this.cityGeneratorService = new CityGeneratorService(appState, scanner);
         this.cityFileService = new CityFileService(appState, scanner);
+        this.citySortingService = new CitySortingService(appState, scanner);
     }
 
     public void mainMenu() {
@@ -123,21 +122,21 @@ public class Menu {
         String choice = scanner.nextLine().trim();
         switch (choice) {
             case "1":
-                System.out.println("Сортирую по названию..");
-                //Впихнуть сортировку
+                System.out.println("Сортирую по названию");
+                citySortingService.sortByName();
                 break;
             case "2":
-                System.out.println("Сортирую по году основания..");
-                //Впихнуть сортировку
+                System.out.println("Сортирую по году основания");
+                citySortingService.sortByYear();
                 break;
             case "3":
-                System.out.println("Сортирую по населению..");
-                //Впихнуть сортировку
+                System.out.println("Сортирую по населению");
+                citySortingService.sortByPopulation();
                 break;
             case "4":
-                System.out.println("Сортирую по чет/нечет..");
-                //Впихнуть сортировку
-            case "0":
+                System.out.println("Сортирую по чет/нечет");
+                citySortingService.sortByEven();
+                case "0":
                 return;
             default:
                 System.out.println("Такого значения нет");

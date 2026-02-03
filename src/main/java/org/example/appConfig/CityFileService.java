@@ -35,11 +35,6 @@ public class CityFileService {
             System.out.println("Укажите путь");
             return;
         }
-        CityArrayList<City> cities = appState.getCurrentCities();
-        if (cities.isEmpty()) {
-            System.out.println("Нет данных для сохранения");
-            return;
-        }
         Path path = Paths.get(filePath);
         try {
             CityArrayList<City> loadedCities = fileReader.readFile(path, true);
