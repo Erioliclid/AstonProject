@@ -118,7 +118,7 @@ public class Menu {
         System.out.println(SORT_MENU_PRINT);
         if (appState.isCityLoaded()) {
             CityArrayList<City> cities = appState.getCurrentCities();
-            System.out.println("Количество городов: " + cities.size() + " дя сортировки");
+            System.out.println("Количество городов: " + cities.size() + " для сортировки");
         }
         System.out.println("Выберите нужный пункт: ");
         String choice = scanner.nextLine().trim();
@@ -176,7 +176,6 @@ public class Menu {
             waitingForEnter();
             return;
         }
-        System.out.println("Подсчет по названию города");
         cityThreadService.countElement();
         waitingForEnter();
     }

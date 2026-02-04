@@ -25,6 +25,7 @@ public class CityInputService {
         while (continueInput) {
             System.out.println("Ручной ввод городов");
             System.out.println("Текущее количество городов: " + citiesList.size());
+            System.out.println("Добавьте город: ");
             try {
                 Optional<City> city;
                 if (isFirstCity) {
@@ -40,8 +41,7 @@ public class CityInputService {
                             Добавить еще один город?
                             1. Добавить город
                             0. Вернуться в меню
-                            Выберите пункт:
-                            """);
+                            Выберите пункт:""");
                     String continueChoice = scanner.nextLine().trim();
                     if (!continueChoice.equals("1")) {
                         continueInput = false;
@@ -53,8 +53,7 @@ public class CityInputService {
                         Желаете повторить ввод?
                         1. Да
                         0. Обратно в меню
-                        Выберите пункт:
-                        """);
+                        Выберите пункт:""");
 
                 String retryChoice = scanner.nextLine().trim();
                 if (!retryChoice.equals("1")) {
