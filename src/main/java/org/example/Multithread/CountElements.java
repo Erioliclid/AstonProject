@@ -4,11 +4,15 @@ import org.example.CityArrayList.CityArrayList;
 
 public class CountElements{
 
+    static private int totalCount = 0;
+
     public static <T> void count(CityArrayList<T> collection, T elementToFind) {
         final int size = collection.size();
         final int threadsAmount = Math.min(size, 8);
         Counter<T>[] threads = new Counter[threadsAmount];
         final int checkSize = (int) Math.ceil((double) size / threadsAmount);
+
+        totalCount = 0;
 
         for (int i = 0; i < threadsAmount; i++) {
             int start = i * checkSize;
@@ -18,7 +22,6 @@ public class CountElements{
             threads[i].start();
         }
 
-        int totalCount = 0;
         try {
             for (Counter<T> curThread : threads) {
                 if (curThread != null) {
@@ -33,6 +36,7 @@ public class CountElements{
         System.out.println("Element " + elementToFind + " have been found " + totalCount + " times");
     }
 
+    public static int getTotalCount() {return totalCount;}
 
     private static class Counter<T> extends Thread {
         private final CityArrayList<T> collection;

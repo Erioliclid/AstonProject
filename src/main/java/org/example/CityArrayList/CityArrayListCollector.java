@@ -1,7 +1,8 @@
-package org.example;
+package org.example.CityArrayList;
 
 import java.util.stream.Collector;
-import org.example.CityArrayList.CityArrayList;
+
+import org.example.City;
 
 public class CityArrayListCollector {
     public static Collector<City, ?, CityArrayList<City>> toCityArrayList() {

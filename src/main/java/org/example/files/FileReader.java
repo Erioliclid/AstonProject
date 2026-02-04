@@ -2,6 +2,7 @@ package org.example.files;
 
 import org.example.*;
 import org.example.CityArrayList.CityArrayList;
+import org.example.CityArrayList.CityArrayListCollector;
 import org.example.exception.NotValidCityDataException;
 import org.example.build.*;
 

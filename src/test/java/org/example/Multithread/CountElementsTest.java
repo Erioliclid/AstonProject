@@ -7,11 +7,10 @@ import org.example.build.CityDirector;
 import org.example.build.ICityBuilder;
 import org.example.exception.NotValidCityDataException;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -46,10 +45,14 @@ class CountElementsTest {
 
     @Test
     void count() {
-        CountElements.count(this.cityArrayList, city1);
+        Runnable task = () -> {
+            CountElements.count(this.cityArrayList, city1);
+            assertEquals( 1, CountElements.getTotalCount());
+        };
 
-        assertTrue(true);
-//        assertTrue(outContent.toString().contains("Element City{name='A', population=100000, year=1234} have been found 1 times"));
+        task.run();
+        task.run();
+        task.run();
     }
 
     private City createTestCity(Object... data) {
