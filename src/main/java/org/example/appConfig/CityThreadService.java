@@ -22,53 +22,47 @@ public class CityThreadService {
     public void countElement() {
         System.out.println("Многопоточный подсчет");
         CityArrayList<City> cities = appState.getCurrentCities();
+        int quantity = cities.size();
         if (cities.isEmpty()) {
             System.out.println("Не загружены данные");
             return;
+        } else {
+            System.out.println("Доступно для подсчета " + quantity + " городов.");
+            System.out.println("Можете выбрать город по его индексу (от 0 до " + (quantity - 1) + ") или ");
         }
         System.out.println("Введите данные через ' , . ; ': Название, численность население, год ");
         String input = scanner.nextLine().trim();
 
-        try {
-            City cityToFind = createCity(input);
+        String[] parts = input.split("[,.;|]");
+        City cityToFind = null;
+        int cityIndex;
+
+        if (parts.length == 1 && parts[0].trim().matches("-?\\d+")) {
+            cityIndex = Integer.parseInt(parts[0]);
+            if (cityIndex < 0 || cityIndex >= cities.size()) {
+                System.out.println("Введен неверный индекс города для многопоточного подсчета");
+            } else {
+                cityToFind = cities.get(cityIndex);
+                System.out.println("Выбран город " + cityToFind.getName()
+                        + " с численностью " + cityToFind.getPopulation()
+                        + ", " + cityToFind.getYear() + " год основания");
+            }
+        } else if (parts.length != 3) {
+            System.out.println("Нужно 3 значения");
+            return;
+        } else {
+            ICityBuilder concept = new CityConcept();
+            try {
+                CityDirector.converter(parts[0].trim(), parts[1].trim(), parts[2].trim(), concept);
+                cityToFind = CityDirector.cityDevelopment(concept);
+            } catch (NotValidCityDataException e) {
+                System.out.println("Ошибка: " + e.getMessage());
+                return;
+            }
+        }
+        if (cityToFind != null) {
             System.out.println("Запускаю многопоточный поиск");
             CountElements.count(cities, cityToFind);
-        } catch (Exception e) {
-            System.out.println("Ошибка: " + e.getMessage());
-        }
-    }
-
-    private City createCity(String input) {
-        String[] parts = input.split(",");
-        if (parts.length < 3) {
-            parts = input.split("[;.]");
-        }
-        if (parts.length < 3) {
-            throw new IllegalArgumentException("Нужно 3 значения");
-        }
-        String name = parts[0].trim();
-        String population = parts[1].trim();
-        String year = parts[2].trim();
-
-        ICityBuilder concept = new CityConcept();
-        try {
-            CityDirector.converter(name, population, year, concept);
-            return CityDirector.cityDevelopment(concept);
-        } catch (NotValidCityDataException e) {
-            City city = new City();
-            city.setName(name);
-
-            try {
-                city.setPopulation(Integer.parseInt(population));
-            } catch (NumberFormatException ex) {
-                city.setPopulation(0);
-            }
-            try {
-                city.setYear(Integer.parseInt(year));
-            } catch (NumberFormatException ex) {
-                city.setYear(0);
-            }
-            return city;
         }
     }
 }
