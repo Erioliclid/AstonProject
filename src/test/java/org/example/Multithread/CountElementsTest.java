@@ -7,11 +7,10 @@ import org.example.build.CityDirector;
 import org.example.build.ICityBuilder;
 import org.example.exception.NotValidCityDataException;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -48,7 +47,7 @@ class CountElementsTest {
     void count() {
         Runnable task = () -> {
             CountElements.count(this.cityArrayList, city1);
-            assertEquals(CountElements.getTotalCount(), 1);
+            assertEquals( 1, CountElements.getTotalCount());
         };
 
         task.run();
