@@ -12,6 +12,8 @@ public class CountElements{
         Counter<T>[] threads = new Counter[threadsAmount];
         final int checkSize = (int) Math.ceil((double) size / threadsAmount);
 
+        totalCount = 0;
+
         for (int i = 0; i < threadsAmount; i++) {
             int start = i * checkSize;
             int end = Math.min(start + checkSize, size);
