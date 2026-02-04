@@ -46,9 +46,14 @@ class CountElementsTest {
 
     @Test
     void count() {
-        CountElements.count(this.cityArrayList, city1);
+        Runnable task = () -> {
+            CountElements.count(this.cityArrayList, city1);
+            assertEquals(CountElements.getTotalCount(), 1);
+        };
 
-        assertEquals(CountElements.getTotalCount(), 1);
+        task.run();
+        task.run();
+        task.run();
     }
 
     private City createTestCity(Object... data) {
