@@ -203,8 +203,6 @@ public class Menu {
     }
 
     private void clear() {
-        final String escConsoleClear = "\u001B[2J";
-
-        System.out.println(escConsoleClear);
+        System.out.println("\n".repeat(10));
     }
 }
