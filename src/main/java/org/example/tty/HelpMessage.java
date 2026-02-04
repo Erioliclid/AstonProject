@@ -12,4 +12,9 @@ public class HelpMessage {
     public static void invitation() {
         System.out.print("#: ");
     }
+
+    public static void fileName() {
+        System.out.println("Введите название файла или путь и название файла");
+        invitation();
+    }
 }
