@@ -2,10 +2,8 @@ package org.example.menu;
 
 import org.example.City;
 import org.example.CityArrayList.CityArrayList;
-import org.example.appConfig.AppState;
-import org.example.appConfig.CityGeneratorService;
-import org.example.appConfig.CityInputService;
-import org.example.appConfig.FileReadService;
+import org.example.appConfig.*;
+
 
 import java.util.Scanner;
 
@@ -16,14 +14,18 @@ public class Menu {
     private final AppState appState;
     private final CityInputService cityInputService;
     private final CityGeneratorService cityGeneratorService;
-    private final FileReadService fileReadService;
+    private final CityFileService cityFileService;
+    private final CitySortingService citySortingService;
+    private final CityThreadService cityThreadService;
 
     public Menu() {
         this.scanner = new Scanner(System.in);
         this.appState = new AppState();
         this.cityInputService = new CityInputService(appState, scanner);
         this.cityGeneratorService = new CityGeneratorService(appState, scanner);
-        this.fileReadService = new FileReadService(appState, scanner);
+        this.cityFileService = new CityFileService(appState, scanner);
+        this.citySortingService = new CitySortingService(appState, scanner);
+        this.cityThreadService = new CityThreadService(appState, scanner);
     }
 
     public void mainMenu() {
@@ -93,18 +95,15 @@ public class Menu {
         switch (choice) {
             case "1":
                 System.out.println("Выбран ввод вручную");
-                //Вызов метода ввода
                 cityInputService.inputLoop();
                 break;
             case "2":
                 System.out.println("Генерирую случайные данные");
-                //Вызов метода рандома
                 cityGeneratorService.generateRandomCities();
                 break;
             case "3":
                 System.out.println("Загрузка из файла..");
-                //Вызов загрузки
-                fileReadService.fileRead();
+                cityFileService.loadFile();
                 break;
             case "0":
                 return;
@@ -125,21 +124,21 @@ public class Menu {
         String choice = scanner.nextLine().trim();
         switch (choice) {
             case "1":
-                System.out.println("Сортирую по названию..");
-                //Впихнуть сортировку
+                System.out.println("Сортирую по названию");
+                citySortingService.sortByName();
                 break;
             case "2":
-                System.out.println("Сортирую по году основания..");
-                //Впихнуть сортировку
+                System.out.println("Сортирую по году основания");
+                citySortingService.sortByYear();
                 break;
             case "3":
-                System.out.println("Сортирую по населению..");
-                //Впихнуть сортировку
+                System.out.println("Сортирую по населению");
+                citySortingService.sortByPopulation();
                 break;
             case "4":
-                System.out.println("Сортирую по чет/нечет..");
-                //Впихнуть сортировку
-            case "0":
+                System.out.println("Сортирую по чет/нечет");
+                citySortingService.sortByEven();
+                case "0":
                 return;
             default:
                 System.out.println("Такого значения нет");
@@ -155,11 +154,11 @@ public class Menu {
         switch (choice) {
             case "1":
                 System.out.println("Сохранение файла..");
-                //Впихнуть метод сохранения
+                cityFileService.saveToFile();
                 break;
             case "2":
                 System.out.println("Добавление данных в файл..");
-                //Впихнуть метод добавления
+                cityFileService.saveToFile();
                 break;
             case "0":
                 return;
@@ -170,8 +169,16 @@ public class Menu {
     }
 
     private void threadCounting() {
+        clear();
         System.out.println("Многопоточный подсчет");
-        // ??
+        if(!appState.isCityLoaded()){
+            System.out.println("Для использования загрузите данные");
+            waitingForEnter();
+            return;
+        }
+        System.out.println("Подсчет по названию города");
+        cityThreadService.countElement();
+        waitingForEnter();
     }
 
     private void showAllCities() {
@@ -196,8 +203,6 @@ public class Menu {
     }
 
     private void clear() {
-        final String escConsoleClear = "\u001B[2J";
-
-        System.out.println(escConsoleClear);
+        System.out.println("\n".repeat(10));
     }
 }
